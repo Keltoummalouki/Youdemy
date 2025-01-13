@@ -8,12 +8,9 @@
     <script defer src="./assets/js/index.js"></script>
 </head>
 <body class="text-gray-800 bg-gray-100 font-sans">
-<!-- Barre de navigation -->
 <nav class="bg-purple-600 shadow-md p-4 flex justify-between items-center">
-    <!-- Logo -->
     <a href="/" class="text-xl font-bold text-white">Youdemy</a>
 
-    <!-- Menu navigation principal -->
     <div class="hidden md:flex items-center space-x-4 flex-1 ml-4">
         <div class="relative dropdown">
             <button id="dropdown-button" class="bg-purple-500 px-4 py-2 text-white rounded-md">Catégories</button>
@@ -26,13 +23,11 @@
         <input type="text" placeholder="Rechercher un cours" class="bg-purple-100 rounded-lg p-2 text-gray-800 w-full border border-purple-300 placeholder-gray-600 hidden md:block">
     </div>
 
-    <!-- Boutons (Connexion/Inscriptions) -->
     <div class="hidden md:flex gap-4">
         <button class="bg-white text-purple-600 px-4 py-2 rounded-lg">Connexion</button>
         <button class="bg-purple-500 text-white px-4 py-2 rounded-lg">S'inscrire</button>
     </div>
 
-    <!-- Menu Hamburger -->
     <button id="hamburger-button" class="md:hidden bg-purple-500 text-white p-2 rounded-md">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -40,13 +35,12 @@
     </button>
 </nav>
 
-<!-- Menu Mobile (Masqué par défaut) -->
 <div id="mobile-menu" class="hidden flex-col md:hidden bg-purple-50 p-4 space-y-4">
     <input type="text" placeholder="Rechercher un cours" class="bg-purple-100 rounded-lg p-2 text-gray-800 w-full border border-purple-300 placeholder-gray-600">
     <button class="bg-white text-purple-600 px-4 py-2 rounded-lg w-full">Connexion</button>
     <button class="bg-purple-500 text-white px-4 py-2 rounded-lg w-full">S'inscrire</button>
 
-    <!-- Dropdown pour mobile -->
+
     <div class="relative dropdown">
         <button id="mobile-dropdown-button" class="bg-purple-500 w-full px-4 py-2 text-white rounded-md">Catégories</button>
         <ul id="mobile-dropdown-menu" class="absolute top-12 left-0 bg-purple-200 shadow-md rounded-md mt-2 w-full hidden">
@@ -57,9 +51,7 @@
     </div>
 </div>
 
-<!-- Section Hero -->
 <section class="relative bg-purple-700 py-16 px-8 text-center text-white">
-    <!-- Ajout de l'effet flou -->
     <div class="absolute inset-0 bg-purple-700 opacity-80 blur-sm"></div>
     <div class="relative">
         <div class="max-w-2xl mx-auto">
@@ -72,7 +64,6 @@
     </div>
 </section>
 
-<!-- Section Cours -->
 <section class="px-8 py-8 bg-white">
     <h2 class="text-xl font-bold mb-4 text-purple-600">Cours les mieux notés</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -94,7 +85,6 @@
     </div>
 </section>
 
-<!-- Section Partenaires -->
 <section class="px-8 py-8 bg-gray-50">
     <h2 class="text-2xl font-bold mb-4 text-purple-600">Ils nous font confiance</h2>
     <div class="flex flex-wrap gap-6 items-center justify-center">
@@ -105,7 +95,6 @@
     </div>
 </section>
 
-<!-- Section Avis des étudiants -->
 <section class="px-8 py-8 bg-white">
     <h2 class="text-xl font-bold mb-4 text-purple-600">Avis des étudiants</h2>
     <div class="flex flex-col md:flex-row gap-6">
