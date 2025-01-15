@@ -189,7 +189,7 @@ $users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
                                     <th class="t-op">Email</th>
                                     <th class="t-op">Password</th>
                                     <th class="t-op">Role</th>
-                                    <th class="t-op"></th>
+                                    <th class="t-op">status</th>
                                     <th class="t-op"></th>
                                 </tr>
                             </thead>
@@ -201,12 +201,7 @@ $users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
                                                 <td class="output"><?php echo htmlspecialchars($user['email']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($user['password']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($user['role']); ?></td>
-                                                <td>
-                                                        <button type="submit" class="edit-btn">
-                                                            <img src="../../../assets/media/image/edit-button.png" class="icon-output" alt="edit-icon">
-                                                        </button>
-
-                                                </td>
+                                                <td class="output"><?php echo htmlspecialchars($user['account_status']); ?></td>
                                                 <td>
                                                         <button type="submit" class="delete-btn">
                                                             <img src="../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
@@ -217,7 +212,7 @@ $users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td colspan="8">No courses found.</td>
+                                            <td colspan="8">No users found.</td>
                                         </tr>
                                     <?php endif; ?>
                             </tbody>

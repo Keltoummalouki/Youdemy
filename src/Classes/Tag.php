@@ -7,8 +7,8 @@ namespace App\Classes;
         private $tag;
 
         public function __construct($id,$tag){
-            return $this->id;
-            return $this->tag;
+            $this->id = $id;
+            $this->tag = $tag;
         }
 
         public function getId(){

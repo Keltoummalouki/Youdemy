@@ -11,11 +11,11 @@ namespace App\Classes;
 
         
         public function __construct($id,$username,$email,$password,$role){
-            return $this->id;
-            return $this->username;
-            return $this->email;
-            return $this->password;
-            return $this->role;
+            $this->id = $id;
+            $this->username = $username;
+            $this->email = $email;
+            $this->password = $password;
+            $this->role = $role;
         }
 
         public function getId(){

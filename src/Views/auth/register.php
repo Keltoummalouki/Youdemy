@@ -49,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="input-box">
                 <select class="input-select" for="role" name="role" require>
                 <option value="">Role</option>
-                <option value="2">Teacher</option>
-                <option value="3">Student</option>
+                <option value="Teacher">Teacher</option>
+                <option value="Student">Student</option>
                 </select>
             </div>
 

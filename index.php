@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youdemy</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="./assets/js/index.js"></script>
+
 </head>
 <body class="text-gray-800 bg-gray-100 font-sans">
 <nav class="bg-purple-600 shadow-md p-4 flex justify-between items-center">
@@ -68,17 +68,17 @@
     <h2 class="text-xl font-bold mb-4 text-purple-600">Cours les mieux notés</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-purple-50 shadow-md p-4 rounded-lg">
-            <img src="./assets/react-javascript.webp" alt="React pour Débutants" class="w-full h-32 object-cover rounded-md mb-4">
+            <img src="./assets/media/image/React-JS.png" alt="React pour Débutants" class="w-full h-32 object-cover rounded-md mb-4">
             <h3 class="text-lg font-bold">React pour Débutants</h3>
             <p class="mt-2 text-gray-600">⭐ 4.9</p>
         </div>
         <div class="bg-purple-50 shadow-md p-4 rounded-lg">
-            <img src="./assets/68747470733a2f2f70726f636573732e66732e746561636861626c6563646e2e636f6d2f41444e75704d6e577952376b435752766d37364c617a2f726573697a653d77696474683a3730352f68747470733a2f2f7777772e66696c657069636b6.jpg" alt="Master Python" class="w-full h-32 object-cover rounded-md mb-4">
+            <img src="./assets/media/image/python.png" alt="Master Python" class="w-full h-32 object-cover rounded-md mb-4">
             <h3 class="text-lg font-bold">Master Python en 30 jours</h3>
             <p class="mt-2 text-gray-600">⭐ 4.8</p>
         </div>
         <div class="bg-purple-50 shadow-md p-4 rounded-lg">
-            <img src="./assets/66f2c0ac9bf5fbd4b7d4ccf8_best-ux-course-online-learn-ux-usability-720x403.webp" alt="UI/UX Design" class="w-full h-32 object-cover rounded-md mb-4">
+            <img src="./assets/media/image/UX-UI-design-les-besoins-du-marc.png" alt="UI/UX Design" class="w-full h-32 object-cover rounded-md mb-4">
             <h3 class="text-lg font-bold">UI/UX Design : Les Fondations</h3>
             <p class="mt-2 text-gray-600">⭐ 4.7</p>
         </div>
@@ -88,10 +88,10 @@
 <section class="px-8 py-8 bg-gray-50">
     <h2 class="text-2xl font-bold mb-4 text-purple-600">Ils nous font confiance</h2>
     <div class="flex flex-wrap gap-6 items-center justify-center">
-        <img src="./assets/vimeo_logo_resized-2.svg" alt="vimeo" class="h-12 p-2">
-        <img src="./assets/samsung_logo.svg" alt="samsung" class="h-12 p-2">
-        <img src="./assets/volkswagen_logo.svg" alt="volkswagen" class="h-12 p-2">
-        <img src="./assets/ericsson_logo.svg" alt="ericsson" class="h-12 p-2">
+        <img src="./assets/media/image/Vimeo_icon_block.png" alt="vimeo" class="h-12 p-2">
+        <img src="./assets/media/image/882747.png" alt="samsung" class="h-12 p-2">
+        <img src="./assets/media/image/microsoft.png" alt="volkswagen" class="h-12 p-2">
+        <img src="./assets/media/image/png-transparent-google-logo-goog.png" alt="ericsson" class="h-12 p-2">
     </div>
 </section>
 
@@ -112,5 +112,6 @@
         </div>
     </div>
 </section>
+<script defer src="./assets/js/main.js"></script>
 </body>
 </html>
