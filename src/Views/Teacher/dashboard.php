@@ -29,6 +29,7 @@ JOIN tags ON courses.tag_id = tags.id")->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="../../../assets/styles/dashboard.css">
+    <link rel="stylesheet" href="../../../assets/styles/dashboard.css">
 </head>
 
 <body>
@@ -77,7 +78,7 @@ JOIN tags ON courses.tag_id = tags.id")->fetchAll(PDO::FETCH_ASSOC);
                         <img src="../../../assets/media/image/teacherblack.png"
                             class="nav-img"
                             alt="institution">
-                        <a href="../candidate/index.php"> Teacher</a>
+                        <a href="../candidate/index.php"> Course</a>
                     </div>
 
                     <div class="option3 nav-option">
@@ -85,13 +86,6 @@ JOIN tags ON courses.tag_id = tags.id")->fetchAll(PDO::FETCH_ASSOC);
                             class="nav-img"
                             alt="articles">
                         <a href="../recruiter/index.php"> Students</a>
-                    </div>
-
-                    <div class="nav-option option4">
-                        <img src="../../../assets/media/image/courseblack.png"
-                            class="nav-img"
-                            alt="report">
-                        <a href="./offers/index.php"> Course</a>
                     </div>
 
                     <div class="nav-option option5">
@@ -190,7 +184,6 @@ JOIN tags ON courses.tag_id = tags.id")->fetchAll(PDO::FETCH_ASSOC);
                             <thead>
                                 <tr>
                                     <th class="t-op">Title</th>
-                                    <th class="t-op">Teacher</th>
                                     <th class="t-op">Description</th>
                                     <th class="t-op">Content</th>
                                     <th class="t-op">Category</th>
@@ -204,7 +197,6 @@ JOIN tags ON courses.tag_id = tags.id")->fetchAll(PDO::FETCH_ASSOC);
                                         <?php foreach ($courses as $course): ?>
                                             <tr class="tr-style">
                                                 <td class="output"><?php echo htmlspecialchars($course['title']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($course['teacher']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['description']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['content']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['category']); ?></td>

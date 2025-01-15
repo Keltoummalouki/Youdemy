@@ -11,12 +11,12 @@ namespace App\Classes;
         private $category;
 
         public function __construct($id,$title,$description,$content,$tag,$category){
-            return $this->id;
-            return $this->title;
-            return $this->description;
-            return $this->content;
-            return $this->tag;
-            return $this->category;
+            $this->id = $id;
+            $this->title = $title;
+            $this->description = $description;
+            $this->content = $content;
+            $this->tag = $tag;
+            $this->category = $category;
         }
 
         public function getId(){
