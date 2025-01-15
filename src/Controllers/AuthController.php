@@ -13,17 +13,24 @@ class AuthController {
     public function login($email, $password) {
         $userModel = new UserModel();
         $user = $userModel->findUser($email, $password);
-        var_dump($user);
         if ($user !== null) {
             switch ($user->getRole()) {
                 case "Admin":
                     header('Location: ../admin/dashboard.php');
                     exit();
                 case "Teacher":
-                    header("Location: ../teacher/index.php");
+                    if($user->getStatus() == "Activated"){ 
+                        header("Location: ../teacher/dashboard.php");
+                    }else {
+                        header("Location: ../auth/notActivated.php");
+                    }
                     exit();
                 case "Student":
-                    header("Location: ../student/index.php");
+                    if($user->getStatus() == "Activated"){ 
+                        header("Location: ../student/index.php");
+                    }else{
+                        header("Location: ../auth/notActivated.php"); 
+                    }
                     exit();
             }
         } else {
@@ -32,20 +39,21 @@ class AuthController {
         }
     }
 
-    public function register($username, $email, $password, $role) {
+    public function register($username, $email, $password, $role,$status) {
         $newUser = new NewUserModel();
-        $result = $newUser->addUser($username, $email, $password, $role);
+        $result = $newUser->addUser($username, $email, $password, $role, $status);
 
         if ($result) {
             switch ($role) {
                 case "Teacher": 
-                    header("Location: ../teacher/dashboard.php");
-
+                    header("Location: ../auth/notActivated.php"); 
+                    exit();
                 case "Student":
                     header("Location: ../student/index.php");
-
+                    exit();
             }
         } else {
+            header("Location: ../auth/register.php");
             exit();
         }
     }

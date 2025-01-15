@@ -31,7 +31,7 @@ class UserModel{
                 return null;
             }
             else{   
-                return new User($row['id'],$row["username"],$row["email"],$row["password"],$row["role"]);
+                return new User($row['id'],$row["username"],$row["email"],$row["password"],$row["role"],$row["account_status"]);
             }
 
         } else {

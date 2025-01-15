@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: ../auth/register.php");
         } else {
             $authController = new AuthController();
-            $authController->register($username, $email, $password, $role);
+            $authController->register($username, $email, $password, $role,$status);
         }
     }
 }
