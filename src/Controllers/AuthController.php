@@ -22,14 +22,14 @@ class AuthController {
                     if($user->getStatus() == "Activated"){ 
                         header("Location: ../teacher/dashboard.php");
                     }else {
-                        header("Location: ../auth/notActivated.php");
+                        header("Location: ../auth/accountStatus.php");
                     }
                     exit();
                 case "Student":
                     if($user->getStatus() == "Activated"){ 
                         header("Location: ../student/index.php");
                     }else{
-                        header("Location: ../auth/notActivated.php"); 
+                        header("Location: ../auth/accountStatus.php"); 
                     }
                     exit();
             }
@@ -46,14 +46,14 @@ class AuthController {
         if ($result) {
             switch ($role) {
                 case "Teacher": 
-                    header("Location: ../auth/notActivated.php"); 
+                    header("Location: ../auth/accountStatus.php"); 
                     exit();
                 case "Student":
                     header("Location: ../student/index.php");
                     exit();
             }
         } else {
-            header("Location: ../auth/register.php");
+            header('Location: ../auth/register.php?error=invalid_credentials');
             exit();
         }
     }

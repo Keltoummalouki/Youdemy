@@ -1,5 +1,6 @@
+
 <?php
-require_once '../../../vendor/autoload.php';
+require_once '../../../../vendor/autoload.php';
 
 use App\Config\DatabaseConnexion;
 use App\Models\UserModel;
@@ -11,20 +12,26 @@ $userModel = new UserModel();
 $totalTeachers = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Teacher'")->fetchColumn();
 $totalStudents = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Student'")->fetchColumn();
 $totalCourses = $conn->query("SELECT COUNT(*) FROM courses")->fetchColumn();
-$totalVisitors = $conn->query("SELECT COUNT(*) FROM users")->fetchColumn();; 
+$totalVisitors = $conn->query("SELECT COUNT(*) FROM users")->fetchColumn();
 
-$users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
+$courses = $conn->query("SELECT 
+    courses.id, 
+    courses.title, 
+    courses.description, 
+    courses.contenu, 
+    courses.category_id as category, 
+    courses.user_id as teacher,
+    coursetag.tag_id as tags
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['new_status'])) {
-    $userId = $_POST['user_id'];
-    $newStatus = $_POST['new_status'];
-    if ($userModel->updateUserStatus($userId, $newStatus)) {
-        header("Location: dashboard.php");
-        exit();
-    } else {
-        echo "Error updating user status.";
-    }
-}
+FROM 
+    COURSES 
+JOIN 
+    category ON category.id = courses.category_id 
+JOIN 
+    users ON users.id = courses.user_id
+JOIN 
+    CourseTag ON CourseTag.course_id = courses.tag_id;
+")->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -36,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="../../../assets/styles/dashboard.css">
+    <link rel="stylesheet" href="../../../../assets/styles/dashboard.css">
 </head>
 
 <body>
@@ -49,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
             <input type="text"
                 placeholder="Search">
             <div class="searchbtn">
-                <img src="../../../assets/media/image/search.png"
+                <img src="../../../../assets/media/image/search.png"
                     class="icn srchicn"
                     alt="search-icon">
             </div>
@@ -61,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                 class="icn"
                 alt="">
             <div class="dp">
-                <img src="../../../assets/media/image/Profil.png"
+                <img src="../../../../../assets/media/image/Profil.png"
                     class="dpicn"
                     alt="dp">
                     <a href="../pages/profil.php"></a>
@@ -82,42 +89,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                     </div>
 
                     <div class="nav-option option2">
-                        <img src="../../../assets/media/image/teacherblack.png"
+                        <img src="../../../../assets/media/image/teacherblack.png"
                             class="nav-img"
                             alt="institution">
-                        <a href="../candidate/index.php"> Course</a>
+                        <a href="../candidate/index.php"> Users</a>
                     </div>
 
                     <div class="option3 nav-option">
-                        <img src="../../../assets/media/image/category.png"
+                        <img src="../../../../assets/media/image/category.png"
                             class="nav-img"
                             alt="articles">
-                        <a href="./categorys/index.php"> Category</a>
+                        <a href="../categorys/index.php"> Category</a>
                     </div>
 
                     <div class="nav-option option4">
-                        <img src="../../../assets/media/image/tag icon.png"
+                        <img src="../../../../assets/media/image/tag icon.png"
                             class="nav-img"
                             alt="report">
-                        <a href="./tags/index.php"> Tag</a>
+                        <a href="../tags/index.php"> Tag</a>
                     </div>
 
                     <div class="nav-option option5">
-                        <img src="../../../assets/media/image/report.png"
+                        <img src="../../../../assets/media/image/report.png"
                             class="nav-img"
                             alt="raport">
                         <h3> Report</h3>
                     </div>
 
                     <div class="nav-option option6">
-                        <img src="../../../assets/media/image/settings.png"
+                        <img src="../../../../assets/media/image/settings.png"
                             class="nav-img"
                             alt="settings">
                         <a href="#"> Settings</a>
                     </div>
 
                     <div class="nav-option logout">
-                        <img src="../../../assets/media/image/login.png"
+                        <img src="../../../../assets/media/image/login.png"
                             class="nav-img"
                             alt="logout">
                         <a href="#">Logout</a>
@@ -148,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                         <h2 class="topic">ToTal Teacher</h2>
                     </div>
 
-                    <img src="../../../assets/media/image/teacher white.png"
+                    <img src="../../../../assets/media/image/teacher white.png"
                         alt="visitors">
                 </div>
 
@@ -158,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                         <h2 class="topic">Total Student</h2>
                     </div>
 
-                    <img src="../../../assets/media/image/students.png"
+                    <img src="../../../../assets/media/image/students.png"
                         alt="recruiter">
                 </div>
 
@@ -168,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                         <h2 class="topic">Total Course</h2>
                     </div>
 
-                    <img src="../../../assets/media/image/coursewhite.png"
+                    <img src="../../../../assets/media/image/coursewhite.png"
                         alt="candidate">
                 </div>
 
@@ -180,54 +187,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                         <h2 class="topic">Total Visitors</h2>
                     </div>
 
-                    <img src="../../../assets/media/image/visiteur-white.png" alt="active">
+                    <img src="../../../../assets/media/image/visiteur-white.png" alt="active">
                 </div>
             </div>
 
             <div class="report-container">
                 <div class="report-header">
-                    <h1 class="recent-Articles">Recent Users</h1>
-                    <div>
-                    
-                    <button id="add-btn"><a href="../admin/options.php">Options</a></button>
-
-                    </div>
+                    <h1 class="recent-Articles">Recent courses</h1>
                 </div>
                     <div class="table-wrapper">
                         <table class="styled-table">
                             <thead>
                                 <tr>
-                                    <th class="t-op">UserName</th>
-                                    <th class="t-op">Email</th>
-                                    <th class="t-op">Password</th>
-                                    <th class="t-op">Role</th>
-                                    <th class="t-op">account status</th>
+                                    <th class="t-op">courses</th>
+                                    <th class="t-op">description</th>
+                                    <th class="t-op">contenu</th>
+                                    <th class="t-op">category</th>
+                                    <th class="t-op">teacher</th>
+                                    <th class="t-op">tags</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                    <?php if (count($users) > 0): ?>
-                                        <?php foreach ($users as $user): ?>
+                                    <?php if (count($courses) > 0): ?>
+                                        <?php foreach ($courses as $course): ?>
                                             <tr class="tr-style">
-                                                <td class="output"><?php echo htmlspecialchars($user['username']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($user['email']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($user['password']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($user['role']); ?></td>
-                                                <td class="output">
-                                                <form method="POST" action="">
-                                                    <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
-                                                    <select name="new_status" class="account-status" id="accountStatus" onchange="updateSelectColor(this)">
-                                                        <option value="Activated" data-color="green" <?php if ($user['account_status'] == 'Activated') echo 'selected'; ?>>Activated</option>
-                                                        <option value="Not Activated" data-color="orange" <?php if ($user['account_status'] == 'Not Activated') echo 'selected'; ?>>Not Activated</option>
-                                                        <option value="Suspended" data-color="red" <?php if ($user['account_status'] == 'Suspended') echo 'selected'; ?>>Suspended</option>
-                                                        <option value="Deleted" data-color="gray" <?php if ($user['account_status'] == 'Deleted') echo 'selected'; ?>>Deleted</option>
-                                                    </select>
+                                                <td class="output"><?php echo htmlspecialchars($course['title']) ?></td>
+                                                <td class="output"><?php echo htmlspecialchars($course['description']) ?></td>
+                                                <td class="output"><?php echo htmlspecialchars($course['contenu']) ?></td>
+                                                <td class="output"><?php echo htmlspecialchars($course['category']) ?></td>
+                                                <td class="output"><?php echo htmlspecialchars($course['teacher']) ?></td>
+                                                <td class="output"><?php echo htmlspecialchars($course['tags']) ?></td>
+                                                <td>
+                                            <td>
+                                                <form method="POST" action="./delete.php">
+                                                    <input type="hidden" name="player_id" value="<?php echo $course['id']; ?>">
+                                                    <button type="submit" class="delete-btn">
+                                                        <img src="../../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
+                                                    </button>
                                                 </form>
-                                                </td>  
-                                            </tr>
+                                            </td> 
+
+                                        </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td>No users found.</td>
+                                            <td>No category found.</td>
                                         </tr>
                                     <?php endif; ?>
                             </tbody>
@@ -237,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
             </div>
         </div>
     </div>
-    <script src="../../../assets/js/main.js"></script>
+    <script src="../../../../assets/js/main.js"></script>
     
 </body>
 

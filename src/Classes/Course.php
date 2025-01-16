@@ -2,7 +2,7 @@
 
 namespace App\Classes;
 
-    class Course {
+    abstract class Course {
         private $id;
         private $title;
         private $description;
@@ -62,5 +62,7 @@ namespace App\Classes;
         public function setCategory($category){
             $this->category = $category;
         }
+
+        abstract public function displayCourse($id,$title,$description,$content,$tag,$category);
 
     }
