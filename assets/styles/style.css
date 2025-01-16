@@ -1,241 +1,132 @@
+@import url(
+"https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: "Poppins", sans-serif;
+}
+:root {
+--background-color1: #fafaff;
+--background-color2: #ffffff;
+--background-color3: #ededed;
+--background-color4: #cad7fda4;
+--primary-color: #4b49ac;
+--secondary-color: #0c007d;
+--Border-color: #3f0097;
+--one-use-color: #3f0097;
+--two-use-color: #5500cb;
+}
 body {
-    font-family: sans-serif;
-    color: #4A5568;
-    background-color: #F7FAFC;
+background-color: var(--background-color4);
+max-width: 100%;
+overflow-x: hidden;
 }
 
-.navbar {
-    background-color: #6B46C1;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+header {
+height: 70px;
+width: 100vw;
+padding: 0 30px;
+background-color: var(--background-color1);
+position: fixed;
+z-index: 100;
+box-shadow: 1px 1px 15px rgba(161, 182, 253, 0.825);
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+
+.icn {
+height: 30px;
+}
+.menuicn {
+cursor: pointer;
+}
+
+.searchbar,
+.message,
+.logosec {
+display: flex;
+align-items: center;
+justify-content: center;
 }
 
 .logo {
-    font-size: 1.25rem;
+    font-size: 1.8rem;
     font-weight: bold;
-    color: white;
+    color: #2c3e50;
 }
 
-.nav-menu {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    margin-left: 1rem;
+.logo span {
+    color: #3498db;
 }
 
-.dropdown {
-    position: relative;
+.searchbar2 {
+display: none;
 }
 
-.dropdown-button {
-    background-color: #B794F4;
-    padding: 0.5rem 1rem;
-    color: white;
-    border-radius: 0.375rem;
+.logosec {
+gap: 60px;
 }
 
-.dropdown-menu {
-    position: absolute;
-    top: 3rem;
-    left: 0;
-    background-color: #E9D8FD;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 0.375rem;
-    margin-top: 0.5rem;
-    width: 10rem;
-    display: none;
+.searchbar input {
+width: 250px;
+height: 42px;
+border-radius: 50px 0 0 50px;
+background-color: var(--background-color3);
+padding: 0 20px;
+font-size: 15px;
+outline: none;
+border: none;
+}
+.searchbtn {
+width: 50px;
+height: 42px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 0px 50px 50px 0px;
+background-color: var(--secondary-color);
+cursor: pointer;
 }
 
-.dropdown-item {
-    padding: 0.5rem;
-    cursor: pointer;
+.message {
+gap: 40px;
+position: relative;
+cursor: pointer;
+}
+.circle {
+height: 7px;
+width: 7px;
+position: absolute;
+background-color: #fa7bb4;
+border-radius: 50%;
+left: 19px;
+top: 8px;
+}
+.dp {
+height: 40px;
+width: 40px;
+background-color: #626262;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+}
+.main-container {
+display: flex;
+width: 100vw;
+position: relative;
+top: 70px;
+z-index: 1;
+}
+.dpicn {
+height: 42px;
 }
 
-.dropdown-item:hover {
-    background-color: #D6BCFA;
-}
-
-.search-input {
-    background-color: #E9D8FD;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-    width: 100%;
-    border: 1px solid #B794F4;
-    placeholder-color: #A0AEC0;
-}
-
-.auth-buttons {
-    display: flex;
-    gap: 1rem;
-}
-
-.login-button {
-    background-color: white;
-    color: #6B46C1;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-}
-
-.signup-button {
-    background-color: #6B46C1;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-}
-
-.hamburger-button {
-    background-color: #B794F4;
-    color: white;
-    padding: 0.5rem;
-    border-radius: 0.375rem;
-}
-
-.mobile-menu {
-    display: none;
-    flex-direction: column;
-    background-color: #F7FAFC;
-    padding: 1rem;
-    gap: 1rem;
-}
-
-.hero-section {
-    position: relative;
-    background-color: #6B46C1;
-    padding: 4rem 2rem;
-    text-align: center;
-    color: white;
-}
-
-.hero-overlay {
-    position: absolute;
-    inset: 0;
-    background-color: #6B46C1;
-    opacity: 0.8;
-    filter: blur(10px);
-}
-
-.hero-content {
-    position: relative;
-}
-
-.hero-title {
-    font-size: 2rem;
-    font-weight: bold;
-}
-
-.hero-description {
-    margin-top: 1rem;
-}
-
-.explore-button {
-    margin-top: 1.5rem;
-    background-color: #6B46C1;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-}
-
-.courses-section {
-    padding: 2rem;
-    background-color: white;
-}
-
-.courses-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    color: #6B46C1;
-}
-
-.courses-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 1.5rem;
-}
-
-.course-card {
-    background-color: #E9D8FD;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    border-radius: 0.5rem;
-}
-
-.course-image {
-    width: 100%;
-    height: 8rem;
-    object-fit: cover;
-    border-radius: 0.375rem;
-    margin-bottom: 1rem;
-}
-
-.course-title {
-    font-size: 1.125rem;
-    font-weight: bold;
-}
-
-.course-rating {
-    margin-top: 0.5rem;
-    color: #718096;
-}
-
-.partners-section {
-    padding: 2rem;
-    background-color: #EDF2F7;
-}
-
-.partners-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    color: #6B46C1;
-}
-
-.partners-logos {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    justify-content: center;
-}
-
-.partner-logo {
-    height: 3rem;
-    padding: 0.5rem;
-}
-
-.reviews-section {
-    padding: 2rem;
-    background-color: white;
-}
-
-.reviews-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    color: #6B46C1;
-}
-
-.reviews-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.review-card {
-    background-color: #E9D8FD;
-    padding: 1rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 0.5rem;
-}
-
-.review-text {
-    color: #2D3748;
-}
-
-.review-author {
-    margin-top: 0.5rem;
-    font-weight: bold;
-    color: #6B46C1;
+.element.style {
+    margin-top : 50px;
 }

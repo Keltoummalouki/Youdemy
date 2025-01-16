@@ -7,8 +7,8 @@ CREATE TABLE USERS (
     username VARCHAR(200),
     email VARCHAR(200) UNIQUE,
     password VARCHAR(200),
-    role ENUM("Student", "Teacher", "Admin"),
-    account_status ENUM("Not Activated","Activated" , "Suspended", "Deleted") 
+    role ENUM('Student', 'Teacher', 'Admin'),
+    account_status ENUM('Not Activated', 'Activated', 'Suspended', 'Deleted')
 );
 
 CREATE TABLE CATEGORY (
@@ -25,11 +25,11 @@ CREATE TABLE COURSES (
     id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(200),
     description VARCHAR(200),
-    contenu TEXT,
+    content TEXT,
     category_id INT,
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES USERS(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (category_id) REFERENCES CATEGORY(id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (category_id) REFERENCES CATEGORY(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE CourseTag (
@@ -37,7 +37,7 @@ CREATE TABLE CourseTag (
     course_id INT,
     tag_id INT,
     FOREIGN KEY (course_id) REFERENCES COURSES(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (tag_id) REFERENCES TAGS(id) ON DELETE CASCADE ON UPDATE CASCADE 
+    FOREIGN KEY (tag_id) REFERENCES TAGS(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE CourseEnrollments (

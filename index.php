@@ -4,36 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youdemy</title>
+    <link rel="stylesheet" href="./assets/styles/style.css" >
     <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 <body class="text-gray-800 bg-gray-100 font-sans">
-<nav class="bg-purple-600 shadow-md p-4 flex justify-between items-center">
-    <a href="/" class="text-xl font-bold text-white">Youdemy</a>
-
-    <div class="hidden md:flex items-center space-x-4 flex-1 ml-4">
-        <div class="relative dropdown">
-            <button id="dropdown-button" class="bg-purple-500 px-4 py-2 text-white rounded-md">Catégories</button>
-            <ul id="dropdown-menu" class="absolute top-12 left-0 bg-purple-200 shadow-md rounded-md mt-2 w-40 hidden">
-                <li class="p-2 hover:bg-purple-300 text-gray-800">Développement Web</li>
-                <li class="p-2 hover:bg-purple-300 text-gray-800">Design</li>
-                <li class="p-2 hover:bg-purple-300 text-gray-800">Marketing</li>
-            </ul>
+<header>
+        <div class="logosec">
+        <div class="logo">You<span>demy</span></div>
         </div>
-        <input type="text" placeholder="Rechercher un cours" class="bg-purple-100 rounded-lg p-2 text-gray-800 w-full border border-purple-300 placeholder-gray-600 hidden md:block">
-    </div>
 
-    <div class="hidden md:flex gap-4">
-        <button class="bg-white text-purple-600 px-4 py-2 rounded-lg">Connexion</button>
-        <button class="bg-purple-500 text-white px-4 py-2 rounded-lg">S'inscrire</button>
-    </div>
+        <div class="searchbar">
+            <input type="text"
+                placeholder="Search">
+            <div class="searchbtn">
+                <img src="./assets/media/image/search.png"
+                    class="icn srchicn"
+                    alt="search-icon">
+            </div>
+        </div>
 
-    <button id="hamburger-button" class="md:hidden bg-purple-500 text-white p-2 rounded-md">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-    </button>
-</nav>
+        <div class="message">
+            <div class="circle"></div>
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
+                class="icn"
+                alt="">
+            <div class="dp">
+                <img src="./assets/media/image/Profil.png"
+                    class="dpicn"
+                    alt="dp">
+                    <a href="../pages/profil.php"></a>
+            </div>
+        </div>
+    </header>
 
 <div id="mobile-menu" class="hidden flex-col md:hidden bg-purple-50 p-4 space-y-4">
     <input type="text" placeholder="Rechercher un cours" class="bg-purple-100 rounded-lg p-2 text-gray-800 w-full border border-purple-300 placeholder-gray-600">
@@ -55,7 +58,7 @@
     <div class="absolute inset-0 bg-purple-700 opacity-80 blur-sm"></div>
     <div class="relative">
         <div class="max-w-2xl mx-auto">
-            <h1 class="text-3xl md:text-5xl font-bold text-white">Apprenez avec Youdemy</h1>
+            <h1 class="text-3xl md:text-5xl font-bold text-white mt-[50px]">Apprenez avec Youdemy</h1>
             <p class="mt-4">
                 La plateforme idéale pour accroître vos compétences et découvrir des connaissances avec des experts.
             </p>
@@ -112,6 +115,35 @@
         </div>
     </div>
 </section>
-<script defer src="./assets/js/main.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const dropdownButton = document.getElementById("dropdown-button");
+    const dropdownMenu = document.getElementById("dropdown-menu");
+
+    dropdownButton.addEventListener("click", () => {
+        dropdownMenu.classList.toggle("hidden");
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.classList.add("hidden");
+        }
+    });
+
+    const hamburgerButton = document.getElementById("hamburger-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    hamburgerButton.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+    });
+
+    const mobileDropdownButton = document.getElementById("mobile-dropdown-button");
+    const mobileDropdownMenu = document.getElementById("mobile-dropdown-menu");
+
+    mobileDropdownButton.addEventListener("click", () => {
+        mobileDropdownMenu.classList.toggle("hidden");
+    });
+    });
+</script>
 </body>
 </html>
