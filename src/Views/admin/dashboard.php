@@ -2,11 +2,18 @@
 require_once '../../../vendor/autoload.php';
 
 use App\Config\DatabaseConnexion;
-use App\Models\UserModel;
+use App\Controllers\UserController;
 
 $db = new DatabaseConnexion();
 $conn = $db->connect();
-$userModel = new UserModel(); 
+$userController = new UserController();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['new_status'])) {
+    $userId = $_POST['user_id'];
+    $newStatus = $_POST['new_status'];
+    $userController->updateUserStatus($userId, $newStatus);
+}
+
 
 $totalTeachers = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Teacher'")->fetchColumn();
 $totalStudents = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Student'")->fetchColumn();
@@ -14,17 +21,6 @@ $totalCourses = $conn->query("SELECT COUNT(*) FROM courses")->fetchColumn();
 $totalVisitors = $conn->query("SELECT COUNT(*) FROM users")->fetchColumn();; 
 
 $users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['new_status'])) {
-    $userId = $_POST['user_id'];
-    $newStatus = $_POST['new_status'];
-    if ($userModel->updateUserStatus($userId, $newStatus)) {
-        header("Location: dashboard.php");
-        exit();
-    } else {
-        echo "Error updating user status.";
-    }
-}
 
 ?>
 
@@ -85,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                         <img src="../../../assets/media/image/teacherblack.png"
                             class="nav-img"
                             alt="institution">
-                        <a href="../candidate/index.php"> Course</a>
+                        <a href="./courses/index.php"> Course</a>
                     </div>
 
                     <div class="option3 nav-option">
@@ -187,11 +183,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
             <div class="report-container">
                 <div class="report-header">
                     <h1 class="recent-Articles">Recent Users</h1>
-                    <div>
-                    
-                    <button class="add-btn"><a href="../admin/options.php">Options</a></button>
-
-                    </div>
                 </div>
                     <div class="table-wrapper">
                         <table class="styled-table">
@@ -199,7 +190,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                                 <tr>
                                     <th class="t-op">UserName</th>
                                     <th class="t-op">Email</th>
-                                    <th class="t-op">Password</th>
                                     <th class="t-op">Role</th>
                                     <th class="t-op">account status</th>
                                     <th class="t-op"></th>
@@ -211,23 +201,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                                             <tr class="tr-style">
                                                 <td class="output"><?php echo htmlspecialchars($user['username']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($user['email']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($user['password']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($user['role']); ?></td>
                                                 <td class="output">
                                                 <form method="POST" action="">
                                                     <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
-                                                    <select name="new_status" class="account-status" id="accountStatus" onchange="updateSelectColor(this)">
+                                                    <select name="new_status" class="account-status" id="accountStatus" onchange="submitStatus(this)">
                                                         <option value="Activated" data-color="green" <?php if ($user['account_status'] == 'Activated') echo 'selected'; ?>>Activated</option>
                                                         <option value="Not Activated" data-color="orange" <?php if ($user['account_status'] == 'Not Activated') echo 'selected'; ?>>Not Activated</option>
                                                         <option value="Suspended" data-color="red" <?php if ($user['account_status'] == 'Suspended') echo 'selected'; ?>>Suspended</option>
+                                                        <option value="Deleted" data-color="gray" <?php if ($user['account_status'] == 'Deleted') echo 'selected'; ?>>Deleted</option>
                                                     </select>
                                                 </form>
                                                 </td> 
                                                 <td>
                                                 <form method="POST" action="./users/delete.php">
-                                                    <input type="hidden" name="player_id" value="<?php echo $tag['id']; ?>">
+                                                    <input type="hidden" name="player_id" value="<?php echo $user['id']; ?>">
                                                     <button type="submit" class="delete-btn">
-                                                        <img src="../../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
+                                                        <img src="../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
                                                     </button>
                                                 </form> 
                                                 </td>

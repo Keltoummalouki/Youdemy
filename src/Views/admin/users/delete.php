@@ -2,25 +2,25 @@
 
 require_once '../../../../vendor/autoload.php';
          
-use App\Controllers\AuthController;
+use App\Controllers\UserController;
 
-$categoryController = new UserController(); 
+$userController = new UserController(); 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['player_id'])) {
-    $categoryId = $_POST['player_id'];
+    $userId = $_POST['player_id'];
 
-    if (filter_var($categoryId, FILTER_VALIDATE_INT) === false) {
-        echo "Invalid category ID.";
+    if (filter_var($userId, FILTER_VALIDATE_INT) === false) {
+        echo "Invalid user ID.";
         exit(); 
     }
 
-    $result = $categoryController->deleteCategory($categoryId);
+    $result = $userController->deleteUser($userId);
 
     if ($result) {
-        header("Location: index.php");
+        header("Location: ../dashboard.php");
         exit();
     } else {
-        echo "Error deleting category.";
+        echo "Error deleting user.";
     }
 } else {
     echo "Invalid request.";
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['player_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../../../../assets/styles/addform.css">
-    <title>Category</title>
+    <title>User</title>
 </head>
 <body>
     <a href="./index.php"><img src="../../../../assets/media/image/fleche-gauche.png" alt="return" class="return-icon"></a>
