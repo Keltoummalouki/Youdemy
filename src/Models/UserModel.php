@@ -71,5 +71,14 @@ class UserModel{
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function removeUser($userId) {
+    
+        $sql = "DELETE FROM Users WHERE id = :userId";
+        $stmt = $this->connexion->prepare($sql);
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+    
+        return $stmt->execute();
+    }
 } 
 

@@ -4,8 +4,6 @@ require_once '../../../../vendor/autoload.php';
          
 use App\Controllers\TagController;
 
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(empty($_POST["tag"])) {
     } else {
@@ -15,6 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $tagController = new TagController();
             $tagController->createTag($tag);
+            header('Location: ./index.php');
+            exit;
         }
     }
 }

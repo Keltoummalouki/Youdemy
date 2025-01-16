@@ -14,24 +14,29 @@ $totalStudents = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Student'
 $totalCourses = $conn->query("SELECT COUNT(*) FROM courses")->fetchColumn();
 $totalVisitors = $conn->query("SELECT COUNT(*) FROM users")->fetchColumn();
 
-$courses = $conn->query("SELECT 
-    courses.id, 
-    courses.title, 
-    courses.description, 
-    courses.contenu, 
-    courses.category_id as category, 
-    courses.user_id as teacher,
-    coursetag.tag_id as tags
-
-FROM 
-    COURSES 
-JOIN 
-    category ON category.id = courses.category_id 
-JOIN 
-    users ON users.id = courses.user_id
-JOIN 
-    CourseTag ON CourseTag.course_id = courses.tag_id;
+$courses = $conn->query("
+    SELECT 
+        courses.id, 
+        courses.title, 
+        courses.description, 
+        courses.content AS contenu, 
+        courses.category_id AS category, 
+        courses.user_id AS teacher,
+        GROUP_CONCAT(tags.tag SEPARATOR ', ') AS tags
+    FROM 
+        COURSES
+    JOIN 
+        CATEGORY ON CATEGORY.id = courses.category_id
+    JOIN 
+        USERS ON USERS.id = courses.user_id
+    JOIN 
+        CourseTag ON courses.id = CourseTag.course_id
+    JOIN 
+        TAGS ON CourseTag.tag_id = TAGS.id
+    GROUP BY 
+        courses.id
 ")->fetchAll(PDO::FETCH_ASSOC);
+
 
 ?>
 
@@ -68,10 +73,10 @@ JOIN
                 class="icn"
                 alt="">
             <div class="dp">
-                <img src="../../../../../assets/media/image/Profil.png"
+                <img src="../../../../assets/media/image/Profil.png"
                     class="dpicn"
                     alt="dp">
-                    <a href="../pages/profil.php"></a>
+                    <a href="../../auth/login.php"></a>
             </div>
         </div>
     </header>
@@ -85,14 +90,14 @@ JOIN
                         <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
                             class="nav-img"
                             alt="dashboard">
-                        <a href="./dashboard.php">Dashboard</a>
+                        <a href="../dashboard.php">Dashboard</a>
                     </div>
 
                     <div class="nav-option option2">
-                        <img src="../../../../assets/media/image/teacherblack.png"
+                        <img src="../../../../assets/media/image/courseblack.png"
                             class="nav-img"
                             alt="institution">
-                        <a href="../candidate/index.php"> Users</a>
+                        <a href="#"> Courses</a>
                     </div>
 
                     <div class="option3 nav-option">
@@ -205,6 +210,7 @@ JOIN
                                     <th class="t-op">category</th>
                                     <th class="t-op">teacher</th>
                                     <th class="t-op">tags</th>
+                                    <th></th>
                                     <th></th>
                                 </tr>
                             </thead>

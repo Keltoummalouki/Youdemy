@@ -11,8 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $CategoryController = new CategoryController();
     $result = $CategoryController->updateCategory((int)$categoryId, $category);
 
-    header("Location: ./index.php");
-    exit();
+    header('Location: ./index.php');
+    exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {

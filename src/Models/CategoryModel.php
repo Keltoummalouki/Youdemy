@@ -25,12 +25,12 @@ class CategoryModel {
             $stmt->execute();
 
             return $this->connexion->lastInsertId();
+            
         } catch (PDOException $e) {
             return null; 
         }
     }
 
-    
     public function removeCategory($categoryId) {
     
         $sql = "DELETE FROM CATEGORY WHERE id = :categoryId";
@@ -42,6 +42,7 @@ class CategoryModel {
         
     public function getCategoryById($categoryId) {
         try {
+            
             $query = "SELECT * FROM CATEGORY WHERE id = :id";
             $stmt = $this->connexion->prepare($query); 
             $stmt->bindParam(':id', $categoryId, PDO::PARAM_INT);
@@ -49,6 +50,7 @@ class CategoryModel {
             $category = $stmt->fetch(PDO::FETCH_ASSOC); 
     
             return $category;
+
         } catch (PDOException $e) {
             error_log("Database error: " . $e->getMessage());
             return null; 
@@ -62,7 +64,9 @@ class CategoryModel {
             $stmt->bindParam(':categoryId', $categoryId, PDO::PARAM_INT);
             $stmt->bindParam(':newCategory', $newCategory, PDO::PARAM_STR); 
             $stmt->execute();
+
             return $stmt->rowCount();
+            
         } catch (PDOException $e) {
             error_log("Database error: " . $e->getMessage());
             return false; 

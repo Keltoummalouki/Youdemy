@@ -4,8 +4,6 @@ require_once '../../../../vendor/autoload.php';
          
 use App\Controllers\CategoryController;
 
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(empty($_POST["category"])) {
     } else {
@@ -15,9 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $CategoryController = new CategoryController();
             $CategoryController->createCategory($category);
+            header('Location: ./index.php');
+            exit;
         }
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

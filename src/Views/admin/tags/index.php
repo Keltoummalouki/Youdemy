@@ -51,10 +51,10 @@ $tags = $conn->query("SELECT * FROM TAGS")->fetchAll(PDO::FETCH_ASSOC);
                 class="icn"
                 alt="">
             <div class="dp">
-                <img src="../../../../../assets/media/image/Profil.png"
+                <img src="../../../../assets/media/image/Profil.png"
                     class="dpicn"
                     alt="dp">
-                    <a href="../pages/profil.php"></a>
+                    <a href="../../auth/login.php"></a>
             </div>
         </div>
     </header>
@@ -68,14 +68,14 @@ $tags = $conn->query("SELECT * FROM TAGS")->fetchAll(PDO::FETCH_ASSOC);
                         <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
                             class="nav-img"
                             alt="dashboard">
-                        <a href="./dashboard.php">Dashboard</a>
+                        <a href="../dashboard.php">Dashboard</a>
                     </div>
 
                     <div class="nav-option option2">
                         <img src="../../../../assets/media/image/teacherblack.png"
                             class="nav-img"
                             alt="institution">
-                        <a href="."> Course</a>
+                        <a href="../courses/index.php"> Course</a>
                     </div>
 
                     <div class="option3 nav-option">
@@ -89,7 +89,7 @@ $tags = $conn->query("SELECT * FROM TAGS")->fetchAll(PDO::FETCH_ASSOC);
                         <img src="../../../../assets/media/image/tag icon.png"
                             class="nav-img"
                             alt="report">
-                        <a href="./tag/index.php"> Tag</a>
+                        <a href="#"> Tag</a>
                     </div>
 
                     <div class="nav-option option5">

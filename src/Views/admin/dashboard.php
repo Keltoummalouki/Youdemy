@@ -61,10 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                 class="icn"
                 alt="">
             <div class="dp">
-                <img src="../../../assets/media/image/Profil.png"
+                <img src="../../../../assets/media/image/Profil.png"
                     class="dpicn"
                     alt="dp">
-                    <a href="../pages/profil.php"></a>
+                    <a href="../../auth/login.php"></a>
             </div>
         </div>
     </header>
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                         <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
                             class="nav-img"
                             alt="dashboard">
-                        <a href="./dashboard.php">Dashboard</a>
+                        <a href="#">Dashboard</a>
                     </div>
 
                     <div class="nav-option option2">
@@ -202,6 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                                     <th class="t-op">Password</th>
                                     <th class="t-op">Role</th>
                                     <th class="t-op">account status</th>
+                                    <th class="t-op"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -219,10 +220,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                                                         <option value="Activated" data-color="green" <?php if ($user['account_status'] == 'Activated') echo 'selected'; ?>>Activated</option>
                                                         <option value="Not Activated" data-color="orange" <?php if ($user['account_status'] == 'Not Activated') echo 'selected'; ?>>Not Activated</option>
                                                         <option value="Suspended" data-color="red" <?php if ($user['account_status'] == 'Suspended') echo 'selected'; ?>>Suspended</option>
-                                                        <option value="Deleted" data-color="gray" <?php if ($user['account_status'] == 'Deleted') echo 'selected'; ?>>Deleted</option>
                                                     </select>
                                                 </form>
-                                                </td>  
+                                                </td> 
+                                                <td>
+                                                <form method="POST" action="./users/delete.php">
+                                                    <input type="hidden" name="player_id" value="<?php echo $tag['id']; ?>">
+                                                    <button type="submit" class="delete-btn">
+                                                        <img src="../../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
+                                                    </button>
+                                                </form> 
+                                                </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
