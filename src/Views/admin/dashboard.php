@@ -189,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ne
                     <h1 class="recent-Articles">Recent Users</h1>
                     <div>
                     
-                    <button id="add-btn"><a href="../admin/options.php">Options</a></button>
+                    <button class="add-btn"><a href="../admin/options.php">Options</a></button>
 
                     </div>
                 </div>

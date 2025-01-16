@@ -42,7 +42,7 @@ class CategoryModel {
         
     public function getCategoryById($categoryId) {
         try {
-            $query = "SELECT * FROM categories WHERE id = :id";
+            $query = "SELECT * FROM CATEGORY WHERE id = :id";
             $stmt = $this->connexion->prepare($query); 
             $stmt->bindParam(':id', $categoryId, PDO::PARAM_INT);
             $stmt->execute();

@@ -21,7 +21,7 @@ class TagModel {
                         VALUES (:tag);";
 
             $stmt = $this->connexion->prepare($query);
-            $stmt->bindParam(':tag', $category);
+            $stmt->bindParam(':tag', $tag);
             $stmt->execute();
 
             return $this->connexion->lastInsertId();
@@ -44,11 +44,11 @@ class TagModel {
         try {
             $query = "SELECT * FROM TAGS WHERE id = :id";
             $stmt = $this->connexion->prepare($query); 
-            $stmt->bindParam(':id', $categoryId, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $tagId, PDO::PARAM_INT);
             $stmt->execute();
-            $category = $stmt->fetch(PDO::FETCH_ASSOC); 
+            $tag = $stmt->fetch(PDO::FETCH_ASSOC); 
     
-            return $category;
+            return $tag;
         } catch (PDOException $e) {
             error_log("Database error: " . $e->getMessage());
             return null; 

@@ -26,5 +26,12 @@ class TagController {
         return $result;
     }
 
+    public function getTagById ($tagId) {
+        $updateTag = new TagModel();
+        $result = $updateTag->getTagById($tagId);
+        return $result;
+    }
+
+
 }
 

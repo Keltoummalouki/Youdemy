@@ -198,12 +198,12 @@ $tags = $conn->query("SELECT * FROM TAGS")->fetchAll(PDO::FETCH_ASSOC);
                                             <tr class="tr-style">
                                                 <td class="output"><?php echo htmlspecialchars($tag['tag']) ?></td>
                                                 <td>
-                                                <form method="POST" action="edit.php?id=<?php echo $tag['id']; ?>">
+                                                <a href="./edit.php?id=<?php echo $tag['id']; ?>">
                                                     <input type="hidden" name="player_id" value="<?php echo $tag['id']; ?>">
                                                     <button type="submit" class="edit-btn">
                                                         <img src="../../../../assets/media/image/edit-button.png" class="icon-output" alt="edit-icon">
                                                     </button>
-                                                </form>
+                                                </a>
                                             </td>
                                             <td>
                                                 <form method="POST" action="./delete.php">

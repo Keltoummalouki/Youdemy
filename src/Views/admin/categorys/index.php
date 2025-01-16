@@ -75,7 +75,7 @@ $categorys = $conn->query("SELECT * FROM CATEGORY")->fetchAll(PDO::FETCH_ASSOC);
                         <img src="../../../../assets/media/image/teacherblack.png"
                             class="nav-img"
                             alt="institution">
-                        <a href="../candidate/index.php"> Users</a>
+                        <a href="../courses/index.php"> Course</a>
                     </div>
 
                     <div class="option3 nav-option">
@@ -198,12 +198,11 @@ $categorys = $conn->query("SELECT * FROM CATEGORY")->fetchAll(PDO::FETCH_ASSOC);
                                             <tr class="tr-style">
                                                 <td class="output"><?php echo htmlspecialchars($category['category']) ?></td>
                                                 <td>
-                                                <form method="POST" action="./edit.php?id=<?php echo $category['id']; ?>">
-                                                    <input type="hidden" name="player_id" value="<?php echo $category['id']; ?>">
+                                                <a href="./edit.php?id=<?php echo $category['id']; ?>">
                                                     <button type="submit" class="edit-btn">
                                                         <img src="../../../../assets/media/image/edit-button.png" class="icon-output" alt="edit-icon">
                                                     </button>
-                                                </form>
+                                                </a>
                                             </td>
                                             <td>
                                                 <form method="POST" action="./delete.php">

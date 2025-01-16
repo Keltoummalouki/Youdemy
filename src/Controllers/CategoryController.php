@@ -26,5 +26,13 @@ class CategoryController {
         return $result;
     }
 
+    public function getCategoryById ($categoryId) {
+        $updateCategory = new CategoryModel();
+        $result = $updateCategory->getCategoryById($categoryId);
+        return $result;
+    }
+
+
+
 }
 
