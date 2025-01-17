@@ -12,11 +12,27 @@ $totalStudents = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Student'
 $totalCourses = $conn->query("SELECT COUNT(*) FROM courses")->fetchColumn();
 $totalVisitors = $conn->query("SELECT COUNT(*) FROM users")->fetchColumn();; 
 
-$courses = $conn->query("SELECT courses.title, users.username AS teacher, courses.description, courses.contenu AS content, category.category, tags.tag 
-FROM COURSES 
-JOIN users ON courses.user_id = users.id 
-JOIN CATEGORY ON courses.category_id = CATEGORY.id 
-JOIN tags ON courses.tag_id = tags.id")->fetchAll(PDO::FETCH_ASSOC);
+$courses = $conn->query(" SELECT 
+        courses.id, 
+        courses.title, 
+        courses.description, 
+        courses.content, 
+        courses.category_id AS category, 
+        courses.user_id AS teacher,
+        GROUP_CONCAT(tags.tag SEPARATOR ', ') AS tags
+    FROM 
+        COURSES
+    JOIN 
+        CATEGORY ON CATEGORY.id = courses.category_id
+    JOIN 
+        USERS ON USERS.id = courses.user_id
+    JOIN 
+        CourseTag ON courses.id = CourseTag.course_id
+    JOIN 
+        TAGS ON CourseTag.tag_id = TAGS.id
+    GROUP BY 
+        courses.id 
+")->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -28,7 +44,6 @@ JOIN tags ON courses.tag_id = tags.id")->fetchAll(PDO::FETCH_ASSOC);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="../../../assets/styles/dashboard.css">
     <link rel="stylesheet" href="../../../assets/styles/dashboard.css">
 </head>
 
@@ -175,7 +190,7 @@ JOIN tags ON courses.tag_id = tags.id")->fetchAll(PDO::FETCH_ASSOC);
                     <h1 class="recent-Articles">Recent Course</h1>
                     <div>
                     
-                    <button id="add-btn"><a href="../admin/options.php">Options</a></button>
+                    <button id="add-btn"><a href="./CourseManage/add.php">Add</a></button>
 
                     </div>
                 </div>
@@ -200,19 +215,22 @@ JOIN tags ON courses.tag_id = tags.id")->fetchAll(PDO::FETCH_ASSOC);
                                                 <td class="output"><?php echo htmlspecialchars($course['description']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['content']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['category']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($course['tag']); ?></td>
+                                                <td class="output"><?php echo htmlspecialchars($course['tags']); ?></td>
                                                 <td>
-                                                        <button type="submit" class="edit-btn">
-                                                            <img src="../../../assets/media/image/edit-button.png" class="icon-output" alt="edit-icon">
-                                                        </button>
-
-                                                </td>
-                                                <td>
-                                                        <button type="submit" class="delete-btn">
-                                                            <img src="../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
-                                                        </button>
-
-                                                </td>
+                                                <a href="./CourseManage/update.php?id=<?php echo $course['id']; ?>">
+                                                    <button type="submit" class="edit-btn">
+                                                        <img src="../../../assets/media/image/edit-button.png" class="icon-output" alt="edit-icon">
+                                                    </button>
+                                                </a>
+                                            </td>
+                                            <td>
+                                            <form method="POST" action="./CourseManage/delete.php">
+                                                <input type="hidden" name="course_id" value="<?php echo $course['id']; ?>">
+                                                <button type="submit" class="delete-btn">
+                                                    <img src="../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
+                                                </button>
+                                            </form>
+                                            </td> 
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>

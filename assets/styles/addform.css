@@ -11,20 +11,28 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: 120vh;
     background-color: black;
+
 }
 
 .container {
-    width: 420px;
+    width: 550px;
+    max-height: 120vh;
+    overflow: auto;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, .2);
+    margin: 10px ;
     backdrop-filter: blur(20px);
     box-shadow: 0 0 10px rgba(0, 0, 0, .2);
     color: #fff;
     border-radius: 10px;
     padding: 30px 40px;
+    min-height: 80vh;
+    background-color: black;
+    overflow: hidden;
 }
+
 
 .container h1 {
     font-size: 36px;
@@ -39,7 +47,6 @@ body {
 
 .input-box input {
     width: 100%;
-    /* height: 100%; */
     background: transparent;
     border: none;
     outline: none;
@@ -56,7 +63,6 @@ body {
 
 .input-select{
     width: 100%;
-    /* height: 100%; */
     background: transparent;
     border: none;
     outline: none;
@@ -92,6 +98,8 @@ body {
     font-size: 16px;
     color: white;
     font-weight: 600;
+    margin-top: 20px;
+
 }
 
 .container .register-link {
@@ -100,15 +108,6 @@ body {
     margin: 20px 0 15px;
 }
 
-.register-link p a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.register-link p a:hover {
-    text-decoration: underline;
-}
 
 .return-icon {
     width: 50px;
@@ -116,4 +115,111 @@ body {
     position: absolute;
     top: 6%;
     left: 5%;
+}
+  
+#editor-container {
+    width: 100%;
+    background: transparent;
+    border: 2px solid rgba(225, 255, 255, .2);
+    border-radius: 40px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+#editor {
+    background: transparent;
+    color: #fff;
+}
+
+.ql-toolbar {
+    border: none !important;
+    border-bottom: 2px solid rgba(225, 255, 255, .2) !important;
+    background: transparent !important;
+}
+
+.ql-container {
+    border: none !important;
+    background: transparent !important;
+}
+
+.ql-toolbar button,
+.ql-toolbar button.ql-active,
+.ql-toolbar .ql-picker-label,
+.ql-toolbar .ql-picker-item {
+    color: #fff !important;
+}
+
+.ql-toolbar button:hover,
+.ql-toolbar button.ql-active,
+.ql-toolbar .ql-picker-label:hover,
+.ql-toolbar .ql-picker-item:hover {
+    color: rgb(0, 255, 0) !important;
+}
+
+.ql-toolbar .ql-stroke {
+    stroke: #fff !important;
+}
+
+.ql-toolbar .ql-fill {
+    fill: #fff !important;
+}
+
+.ql-toolbar button:hover .ql-stroke,
+.ql-toolbar button.ql-active .ql-stroke {
+    stroke: rgb(0, 255, 0) !important;
+}
+
+.ql-toolbar button:hover .ql-fill,
+.ql-toolbar button.ql-active .ql-fill {
+    fill: rgb(0, 255, 0) !important;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    padding: 15px;
+    border: 2px solid rgba(225, 255, 255, .2);
+    border-radius: 40px;
+}
+
+.tag-checkbox {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background: transparent;
+    border: 1px solid rgba(225, 255, 255, .2);
+    transition: all 0.3s ease;
+}
+
+.tag-checkbox:hover {
+    background: rgba(0, 255, 0, 0.1);
+    border-color: rgb(0, 255, 0);
+}
+
+.tag-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.tag-label {
+    color: #fff;
+    font-size: 14px;
+    user-select: none;
+}
+
+.tag-checkbox input[type="checkbox"]:checked + .tag-label {
+    color: rgb(0, 255, 0);
+}
+
+.tag-checkbox input[type="checkbox"]:checked + .tag-label::before {
+    content: "✓";
+    margin-right: 5px;
+}
+
+.tag-checkbox:has(input[type="checkbox"]:checked) {
+    background: rgba(0, 255, 0, 0.1);
+    border-color: rgb(0, 255, 0);
 }
