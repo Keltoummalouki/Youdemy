@@ -1,118 +1,142 @@
+<?php
+require_once '../../../vendor/autoload.php';
+
+use App\Config\DatabaseConnexion;
+
+$db = new DatabaseConnexion();
+$conn = $db->connect();
+
+$categorys = $conn->query("SELECT * FROM CATEGORY ORDER BY category")->fetchAll(PDO::FETCH_ASSOC);
+
+try {
+    $stmt = $conn->prepare("
+        SELECT 
+            c.id, 
+            c.title, 
+            c.description, 
+            c.content AS contenu, 
+            c.category_id AS category_id,
+            cat.category AS category_name,  -- Ajout du nom de la catégorie
+            c.user_id AS teacher,
+            u.username,
+            GROUP_CONCAT(t.tag SEPARATOR ', ') AS tags
+        FROM 
+            COURSES c
+        LEFT JOIN 
+            CATEGORY cat ON cat.id = c.category_id
+        LEFT JOIN 
+            USERS u ON u.id = c.user_id
+        LEFT JOIN 
+            CourseTag ct ON c.id = ct.course_id
+        LEFT JOIN 
+            TAGS t ON ct.tag_id = t.id
+        GROUP BY 
+            c.id, c.title, c.description, c.content, c.category_id, cat.category, c.user_id, u.username
+        ORDER BY 
+            c.title
+    ");
+    $stmt->execute();
+    $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log("Database error: " . $e->getMessage());
+    $courses = [];
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Catalogue des cours Youdemy - Plateforme d'apprentissage en ligne">
     <link rel="stylesheet" href="../../../assets/styles/catalog.css">
     <title>Youdemy - Catalogue de Cours</title>
 </head>
 <body>
-<header>
+    <header>
         <div class="logosec">
-        <div class="logo">You<span>demy</span></div>
+            <div class="logo">You<span>demy</span></div>
         </div>
 
         <div class="searchbar">
-            <input type="text"
-                placeholder="Search">
-            <div class="searchbtn">
-                <img src="../../../assets/media/image/search.png"
-                    class="icn srchicn"
-                    alt="search-icon">
-            </div>
+            <input type="text" placeholder="Rechercher un cours" aria-label="Rechercher">
+            <button class="searchbtn">
+                <img src="../../../assets/media/image/search.png" class="icn srchicn" alt="Icône de recherche">
+            </button>
         </div>
 
         <div class="message">
             <div class="circle"></div>
-            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
-                class="icn"
-                alt="">
+            <img src="../../../assets/media/image/notification.png" class="icn" alt="Notifications">
             <div class="dp">
-                <img src="../../../../assets/media/image/Profil.png"
-                    class="dpicn"
-                    alt="dp">
-                    <a href="../../auth/login.php"></a>
+                <img src="../../../assets/media/image/Profil.png" class="dpicn" alt="Photo de profil">
+                <a href="../../auth/login.php" aria-label="Se connecter"></a>
             </div>
         </div>
     </header>
 
     <main class="main-content">
-        <div class="categories">
-            <button class="category-btn">Tous les cours</button>
-            <button class="category-btn">Développement Web</button>
-            <button class="category-btn">Business</button>
-            <button class="category-btn">Design</button>
-            <button class="category-btn">Marketing</button>
-            <button class="category-btn">Photographie</button>
-            <button class="category-btn">Musique</button>
-        </div>
+        <nav class="categories" aria-label="Catégories de cours">
+            <?php if (!empty($categorys)): ?>
+                <?php foreach ($categorys as $category): ?>
+                    <button class="category-btn">
+                        <?php echo htmlspecialchars($category['category']) ?>
+                    </button>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="no-content">Aucune catégorie trouvée.</p>
+            <?php endif; ?>
+        </nav>
 
         <div class="courses-grid">
-            <!-- Carte de cours 1 -->
-            <div class="course-card">
-                <img src="/api/placeholder/280/160" alt="cours" class="course-image">
-                <div class="course-info">
-                    <h3 class="course-title">Développement Web Complet 2024</h3>
-                    <p class="course-instructor">Par Jean Dupont</p>
-                    <div class="course-rating">
-                        <span class="rating-stars">★★★★★</span>
-                        <span>4.8 (2,345 avis)</span>
-                    </div>
-                    <button class="enroll-btn">S'inscrire</button>
-                </div>
-            </div>
-
-            <!-- Carte de cours 2 -->
-            <div class="course-card">
-                <img src="/api/placeholder/280/160" alt="cours" class="course-image">
-                <div class="course-info">
-                    <h3 class="course-title">Marketing Digital pour Débutants</h3>
-                    <p class="course-instructor">Par Marie Martin</p>
-                    <div class="course-rating">
-                        <span class="rating-stars">★★★★☆</span>
-                        <span>4.2 (1,890 avis)</span>
-                    </div>
-                    <button class="enroll-btn">S'inscrire</button>
-                </div>
-            </div>
-
-            <!-- Carte de cours 3 -->
-            <div class="course-card">
-                <img src="/api/placeholder/280/160" alt="cours" class="course-image">
-                <div class="course-info">
-                    <h3 class="course-title">Design UI/UX Master Class</h3>
-                    <p class="course-instructor">Par Sophie Bernard</p>
-                    <div class="course-rating">
-                        <span class="rating-stars">★★★★★</span>
-                        <span>4.9 (3,421 avis)</span>
-                    </div>
-                    <button class="enroll-btn">S'inscrire</button>
-                </div>
-            </div>
-
-            <!-- Carte de cours 4 -->
-            <div class="course-card">
-                <img src="/api/placeholder/280/160" alt="cours" class="course-image">
-                <div class="course-info">
-                    <h3 class="course-title">Python pour la Data Science</h3>
-                    <p class="course-instructor">Par Pierre Dubois</p>
-                    <div class="course-rating">
-                        <span class="rating-stars">★★★★☆</span>
-                        <span>4.5 (1,567 avis)</span>
-                    </div>
-                    <button class="enroll-btn">S'inscrire</button>
-                </div>
-            </div>
+            <?php if (!empty($courses)): ?>
+                <?php foreach ($courses as $course): ?>
+                    <article class="course-card">
+                        <img src="../../../assets/media/image/python.png" 
+                             class="course-image" 
+                             alt="<?php echo htmlspecialchars($course['title']); ?>">
+                        <div class="course-info">
+                            <h3 class="course-title">
+                                <?php echo htmlspecialchars($course['title']); ?>
+                            </h3>
+                            <p class="course-instructor">
+                                <?php echo htmlspecialchars($course['username']); ?>
+                            </p>
+                            <div class="course-rating">
+                                <span class="rating-stars" aria-label="Note de 4.8 sur 5">★★★★★</span>
+                                <span>4.8 (2,345 avis)</span>
+                            </div>
+                            <button class="enroll-btn">S'inscrire</button>
+                            <div class="course-tags">
+                                <button class="category-btn">
+                                    <?php echo htmlspecialchars($course['category_name']); ?>
+                                </button>
+                                <?php if (!empty($course['tags'])): ?>
+                                    <?php foreach (explode(', ', $course['tags']) as $tag): ?>
+                                        <button class="tag-btn">
+                                            <?php echo htmlspecialchars($tag); ?>
+                                        </button>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="no-content">Aucun cours trouvé.</p>
+            <?php endif; ?>
         </div>
-        <div class="pagination">
-            <button class="pagination-btn">«</button>
+
+        <nav class="pagination" aria-label="Navigation des pages">
+            <button class="pagination-btn" aria-label="Page précédente">«</button>
             <button class="pagination-btn active">1</button>
             <button class="pagination-btn">2</button>
             <button class="pagination-btn">3</button>
             <button class="pagination-btn">4</button>
             <button class="pagination-btn">5</button>
-            <button class="pagination-btn">»</button>
-        </div>
+            <button class="pagination-btn" aria-label="Page suivante">»</button>
+        </nav>
     </main>
 </body>
 </html>
