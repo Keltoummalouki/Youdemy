@@ -1,5 +1,5 @@
 <?php 
-require_once '../../../../vendor/autoload.php';
+require_once '../../../vendor/autoload.php';
 
 use App\Controllers\CourseController;
 use App\Config\DatabaseConnexion;
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $courseController->updateCourse($courseId, $title, $description, $content, $category_id, $tags);
 
     if ($result) {
-        header('Location: ../dashboard.php');
+        header('Location: ./dashboard.php');
         exit;
     }
 }
@@ -50,11 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <link rel="stylesheet" href="../../../../assets/styles/addform.css">
+    <link rel="stylesheet" href="../../../assets/styles/addform.css">
     <title>Edit Course</title>
 </head>
 <body>
-    <a href="../dashboard.php"><img src="../../../../assets/media/image/fleche-gauche.png" alt="return" class="return-icon"></a>
+    <a href="./dashboard.php"><img src="../../../assets/media/image/fleche-gauche.png" alt="return" class="return-icon"></a>
     <div class="container">
         <form method="POST" action="" id="form-edit">
             <h1>Edit Course</h1>
@@ -116,6 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
         </form>
     </div>
 
-    <script src="../../../../assets/js/form.js"></script>
+    <script src="../../../assets/js/form.js"></script>
 </body>
 </html>

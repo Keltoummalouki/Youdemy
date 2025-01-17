@@ -8,6 +8,8 @@ use App\Models\CourseModel;
 class CourseController {
     
     public function createCourse($title, $description, $content, $category_id, $user_id, $tags) {
+        SessionManager::requireAuth();
+        SessionManager::checkRole(['Teacher', 'Admin']);
         try {
             $newCourse = new CourseModel();
             $course_id = $newCourse->addCourse($title, $description, $content, $category_id, $user_id, $tags);

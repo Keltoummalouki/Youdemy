@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Config\DatabaseConnexion;
 use App\Models\UserModel;
 use App\Models\NewUserModel;
+use App\Services\SessionManager;
 use PDO;
 
 class AuthController {
@@ -14,6 +15,7 @@ class AuthController {
         $userModel = new UserModel();
         $user = $userModel->findUser($email, $password);
         if ($user !== null) {
+            SessionManager::setUser($user->getId(), $user->getUsername(), $user->getRole());
             switch ($user->getRole()) {
                 case "Admin":
                     header('Location: ../admin/dashboard.php');

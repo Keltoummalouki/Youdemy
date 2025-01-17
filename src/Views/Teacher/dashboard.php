@@ -3,6 +3,10 @@
 require_once '../../../vendor/autoload.php';
 
 use App\Config\DatabaseConnexion;
+use App\Services\SessionManager;
+
+SessionManager::requireAuth();
+$user = SessionManager::getUser();
 
 $db = new DatabaseConnexion();
 $conn = $db->connect();
@@ -12,26 +16,29 @@ $totalStudents = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Student'
 $totalCourses = $conn->query("SELECT COUNT(*) FROM courses")->fetchColumn();
 $totalVisitors = $conn->query("SELECT COUNT(*) FROM users")->fetchColumn();; 
 
-$courses = $conn->query(" SELECT 
-        courses.id, 
-        courses.title, 
-        courses.description, 
-        courses.content, 
-        courses.category_id AS category, 
-        courses.user_id AS teacher,
-        GROUP_CONCAT(tags.tag SEPARATOR ', ') AS tags
-    FROM 
-        COURSES
-    JOIN 
-        CATEGORY ON CATEGORY.id = courses.category_id
-    JOIN 
-        USERS ON USERS.id = courses.user_id
-    JOIN 
-        CourseTag ON courses.id = CourseTag.course_id
-    JOIN 
-        TAGS ON CourseTag.tag_id = TAGS.id
-    GROUP BY 
-        courses.id 
+$courses = $conn->query("SELECT 
+            c.id, 
+            c.title, 
+            c.description, 
+            c.content AS contenu, 
+            c.category_id AS category,
+            c.user_id AS teacher,
+            u.username,
+            GROUP_CONCAT(t.tag SEPARATOR ', ') AS tags
+        FROM 
+            COURSES c
+        LEFT JOIN 
+            CATEGORY cat ON cat.id = c.category_id
+        LEFT JOIN 
+            USERS u ON u.id = c.user_id
+        LEFT JOIN 
+            CourseTag ct ON c.id = ct.course_id
+        LEFT JOIN 
+            TAGS t ON ct.tag_id = t.id
+        GROUP BY 
+            c.id, c.title, c.description, c.content, c.category_id, c.user_id, u.username
+        ORDER BY 
+            c.title
 ")->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
@@ -121,7 +128,7 @@ $courses = $conn->query(" SELECT
                         <img src="../../../assets/media/image/login.png"
                             class="nav-img"
                             alt="logout">
-                        <a href="#">Logout</a>
+                        <a href="../auth/logout.php">Logout</a>
                     </div>
 
                 </div>
@@ -213,7 +220,7 @@ $courses = $conn->query(" SELECT
                                             <tr class="tr-style">
                                                 <td class="output"><?php echo htmlspecialchars($course['title']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['description']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($course['content']); ?></td>
+                                                <td class="output"><?php echo htmlspecialchars($course['contenu']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['category']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['tags']); ?></td>
                                                 <td>

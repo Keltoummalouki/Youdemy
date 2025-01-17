@@ -110,7 +110,7 @@ $categorys = $conn->query("SELECT * FROM CATEGORY")->fetchAll(PDO::FETCH_ASSOC);
                         <img src="../../../../assets/media/image/login.png"
                             class="nav-img"
                             alt="logout">
-                        <a href="#">Logout</a>
+                        <a href="../../auth/logout.php">Logout</a>
                     </div>
 
                 </div>

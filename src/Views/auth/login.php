@@ -1,9 +1,5 @@
 <?php 
 
-session_start();
-
-$_SESSION['user_id'] = $user['id']; 
-
 require_once '../../../vendor/autoload.php';
 
     use App\Controllers\AuthController;

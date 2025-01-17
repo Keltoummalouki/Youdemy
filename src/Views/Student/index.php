@@ -107,7 +107,9 @@ try {
                                 <span class="rating-stars" aria-label="Note de 4.8 sur 5">★★★★★</span>
                                 <span>4.8 (2,345 avis)</span>
                             </div>
-                            <button class="enroll-btn">S'inscrire</button>
+                            <a href="./enroll.php?course_id=<?php echo htmlspecialchars($course['id']); ?>" class="enroll-btn">
+                                Enroll
+                            </a>
                             <div class="course-tags">
                                 <button class="category-btn">
                                     <?php echo htmlspecialchars($course['category_name']); ?>
