@@ -1,5 +1,5 @@
 <?php 
-require_once '../../../../vendor/autoload.php';
+require_once '../../../vendor/autoload.php';
          
 use App\Controllers\CourseController;
 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['course_id'])) {
     $result = $courseController->deleteCourse($courseId);
 
     if ($result) {
-        header("Location: ../dashboard.php");
+        header("Location: ./dashboard.php");
         exit();
     } else {
         $error = "Error deleting course.";

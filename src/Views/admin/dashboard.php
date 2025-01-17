@@ -116,7 +116,7 @@ $users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
                         <img src="../../../assets/media/image/login.png"
                             class="nav-img"
                             alt="logout">
-                        <a href="#">Logout</a>
+                        <a href="../auth/logout.php">Logout</a>
                     </div>
 
                 </div>
