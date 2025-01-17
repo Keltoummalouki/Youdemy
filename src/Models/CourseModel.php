@@ -160,4 +160,29 @@ class CourseModel {
             return [];
         }
     }
+
+    public function getCoursesByTeacher($user_id) {
+        try {
+            $query = "SELECT c.*, 
+                        cat.category as category_name,
+                        GROUP_CONCAT(t.tag) as tags
+                     FROM COURSES c
+                     LEFT JOIN CATEGORY cat ON c.category_id = cat.id
+                     LEFT JOIN CourseTag ct ON c.id = ct.course_id
+                     LEFT JOIN TAGS t ON ct.tag_id = t.id
+                     WHERE c.user_id = :user_id
+                     GROUP BY c.id
+                     ORDER BY c.id DESC";
+                     
+            $stmt = $this->connexion->prepare($query);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return [];
+        }
+    }
+    
 }

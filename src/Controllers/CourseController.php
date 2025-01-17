@@ -13,11 +13,10 @@ class CourseController {
             $course_id = $newCourse->addCourse($title, $description, $content, $category_id, $user_id, $tags);
             
             if ($course_id) {
-                // Redirection vers la page du cours créé
-                header("Location: ../courses/view.php?id=" . $course_id);
+
+                header("Location: ../courses/dashboard.php?id=" . $course_id);
                 exit();
             } else {
-                // Redirection avec erreur
                 header("Location: ../courses/add.php?error=creation_failed");
                 exit();
             }

@@ -190,7 +190,7 @@ $courses = $conn->query(" SELECT
                     <h1 class="recent-Articles">Recent Course</h1>
                     <div>
                     
-                    <button id="add-btn"><a href="./CourseManage/add.php">Add</a></button>
+                    <button id="add-btn"><a href="./add.php">Add</a></button>
 
                     </div>
                 </div>
@@ -217,19 +217,19 @@ $courses = $conn->query(" SELECT
                                                 <td class="output"><?php echo htmlspecialchars($course['category']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['tags']); ?></td>
                                                 <td>
-                                                <a href="./CourseManage/update.php?id=<?php echo $course['id']; ?>">
+                                                <a href="./update.php?id=<?php echo $course['id']; ?>">
                                                     <button type="submit" class="edit-btn">
                                                         <img src="../../../assets/media/image/edit-button.png" class="icon-output" alt="edit-icon">
                                                     </button>
                                                 </a>
                                             </td>
                                             <td>
-                                            <form method="POST" action="./CourseManage/delete.php">
-                                                <input type="hidden" name="course_id" value="<?php echo $course['id']; ?>">
-                                                <button type="submit" class="delete-btn">
-                                                    <img src="../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
-                                                </button>
-                                            </form>
+                                            <form method="POST" action="./delete.php">
+                                            <input type="hidden" name="course_id" value="<?php echo $course['id']; ?>">
+                                            <button type="submit" class="delete-btn">
+                                                <img src="../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
+                                            </button>
+                                        </form>
                                             </td> 
                                             </tr>
                                         <?php endforeach; ?>
