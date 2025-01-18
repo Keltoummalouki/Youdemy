@@ -45,7 +45,6 @@ class CourseEnrollment {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Add this method to check if a user is enrolled
     public function isEnrolled($userId, $courseId) {
         $query = "SELECT COUNT(*) FROM CourseEnrollments 
                  WHERE user_id = :user_id AND course_id = :course_id";

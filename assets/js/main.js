@@ -9,7 +9,6 @@ function submitStatus(selectElement) {
     selectElement.closest('form').submit();
 }
 
-
 document.addEventListener('DOMContentLoaded', ()=>{
 
     document.getElementsByName('new_status').forEach((item)=>{

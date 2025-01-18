@@ -64,15 +64,6 @@ namespace App\Classes;
             $this->category = $category;
         }
 
-        public function displayCourse($id, $title, $description, $content, $tag, $category) {
-            return [
-                'id' => $id,
-                'title' => $title,
-                'description' => $description,
-                'content' => $content,
-                'tag' => $tag,
-                'category' => $category
-            ];
-        }
+        abstract public function displayCourse();
 }
         

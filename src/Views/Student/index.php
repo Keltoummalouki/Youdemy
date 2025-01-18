@@ -7,6 +7,8 @@ $db = new DatabaseConnexion();
 $conn = $db->connect();
 
 $categorys = $conn->query("SELECT * FROM CATEGORY ORDER BY category")->fetchAll(PDO::FETCH_ASSOC);
+$page = $page ?? 1;
+$totalPages = $totalPages ?? 1;
 
 try {
     $stmt = $conn->prepare("
@@ -41,6 +43,7 @@ try {
     error_log("Database error: " . $e->getMessage());
     $courses = [];
 }
+
 
 ?>
 
@@ -131,13 +134,17 @@ try {
         </div>
 
         <nav class="pagination" aria-label="Navigation des pages">
-            <button class="pagination-btn" aria-label="Page précédente">«</button>
-            <button class="pagination-btn active">1</button>
-            <button class="pagination-btn">2</button>
-            <button class="pagination-btn">3</button>
-            <button class="pagination-btn">4</button>
-            <button class="pagination-btn">5</button>
-            <button class="pagination-btn" aria-label="Page suivante">»</button>
+            <?php if ($page > 1): ?>
+                <button class="pagination-btn" aria-label="Page précédente" onclick="window.location.href='?page=<?= $page - 1 ?>'">«</button>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <button class="pagination-btn <?= $i == $page ? 'active' : '' ?>" onclick="window.location.href='?page=<?= $i ?>'"><?= $i ?></button>
+            <?php endfor; ?>
+
+            <?php if ($page < $totalPages): ?>
+                <button class="pagination-btn" aria-label="Page suivante" onclick="window.location.href='?page=<?= $page + 1 ?>'">»</button>
+            <?php endif; ?>
         </nav>
     </main>
 </body>

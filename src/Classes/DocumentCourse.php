@@ -12,12 +12,17 @@ namespace App\Classes;
             $this->pageCount = $pageCount;
         }
     
-        public function displayCourse($id, $title, $description, $content, $tag, $category) {
-            return array_merge(parent::displayCourse($id, $title, $description, $content, $tag, $category), [
+        public function displayCourse() {
+            return [
                 'type' => 'document',
+                'id' => $this->id,
+                'title' => $this->title,
+                'description' => $this->description,
                 'documentFormat' => $this->documentFormat,
-                'pageCount' => $this->pageCount
-            ]);
+                'pageCount' => $this->pageCount,
+                'tag' => $this->tag,
+                'category' => $this->category
+            ];
         }
     }
         

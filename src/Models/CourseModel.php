@@ -184,5 +184,84 @@ class CourseModel {
             return [];
         }
     }
+
+    public function getStatistics() {
+        $statistics = [];
+
+        $statistics['total_courses'] = $this->connexion->query("SELECT COUNT(*) FROM COURSES")->fetchColumn();
+
+        $statistics['courses_by_category'] = $this->connexion->query("
+            SELECT cat.category, COUNT(c.id) as count
+            FROM COURSES c
+            JOIN CATEGORY cat ON c.category_id = cat.id
+            GROUP BY cat.category
+        ")->fetchAll(PDO::FETCH_ASSOC);
+
+        $statistics['most_popular_course'] = $this->connexion->query("
+            SELECT c.title, COUNT(ce.user_id) as enrollments
+            FROM CourseEnrollments ce
+            JOIN COURSES c ON ce.course_id = c.id
+            GROUP BY ce.course_id
+            ORDER BY enrollments DESC
+            LIMIT 1
+        ")->fetch(PDO::FETCH_ASSOC);
+
+        $statistics['top_teachers'] = $this->connexion->query("
+            SELECT u.username, COUNT(c.id) as courses_taught
+            FROM COURSES c
+            JOIN USERS u ON c.user_id = u.id
+            WHERE u.role = 'Teacher'
+            GROUP BY u.id
+            ORDER BY courses_taught DESC
+            LIMIT 3
+        ")->fetchAll(PDO::FETCH_ASSOC);
+
+        return $statistics;
+    }
+
+    public function getPaginatedCourses($page = 1, $perPage = 10) {
+        $offset = ($page - 1) * $perPage;
     
+        $query = "
+            SELECT 
+                c.id, 
+                c.title, 
+                c.description, 
+                c.content AS contenu, 
+                c.category_id AS category_id,
+                cat.category AS category_name,
+                c.user_id AS teacher,
+                u.username,
+                GROUP_CONCAT(t.tag SEPARATOR ', ') AS tags
+            FROM 
+                COURSES c
+            LEFT JOIN 
+                CATEGORY cat ON cat.id = c.category_id
+            LEFT JOIN 
+                USERS u ON u.id = c.user_id
+            LEFT JOIN 
+                CourseTag ct ON c.id = ct.course_id
+            LEFT JOIN 
+                TAGS t ON ct.tag_id = t.id
+            GROUP BY 
+                c.id, c.title, c.description, c.content, c.category_id, cat.category, c.user_id, u.username
+            ORDER BY 
+                c.title
+            LIMIT :limit OFFSET :offset
+        ";
+    
+        $stmt = $this->connexion->prepare($query);
+        $stmt->bindValue(':limit', (int)$perPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function getTotalCourses() {
+        $query = "SELECT COUNT(*) as total FROM COURSES";
+        $stmt = $this->connexion->query($query);
+        return $stmt->fetchColumn();
+    }
+        
 }

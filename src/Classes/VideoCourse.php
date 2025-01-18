@@ -12,16 +12,16 @@ class VideoCourse extends Course {
         $this->duration = $duration;
     }
 
-    public function displayCourse($id, $title, $description, $content, $tag, $category) {
+    public function displayCourse() {
         return [
             'type' => 'video',
-            'id' => $id,
-            'title' => $title,
-            'description' => $description,
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
             'videoUrl' => $this->videoUrl,
             'duration' => $this->duration,
-            'tag' => $tag,
-            'category' => $category
+            'tag' => $this->tag,
+            'category' => $this->category
         ];
     }
 }

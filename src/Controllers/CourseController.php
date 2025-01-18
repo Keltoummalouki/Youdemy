@@ -57,6 +57,19 @@ class CourseController {
         return $result;
     }
 
+    public function catalog() {
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    
+        $perPage = 10;
+        $courseModel = new CourseModel();
+    
+        $courses = $courseModel->getPaginatedCourses($page, $perPage);
+    
+        $totalCourses = $courseModel->getTotalCourses();
+        $totalPages = ceil($totalCourses / $perPage);
+
+        require_once '../Views/student/index.php';
+    }
 
 
 }

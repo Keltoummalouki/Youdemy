@@ -16,7 +16,7 @@ class StudentModel{
         
     public function getAllCourses() {
         $query = "SELECT * FROM courses";
-        $stmt = $this->db->prepare($query);
+        $stmt = $this->connexion->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

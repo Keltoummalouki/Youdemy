@@ -19,7 +19,7 @@ class EnrollmentController {
         if (!$userId || !$courseId) {
             return false;
         }
-        
+
         if ($this->isEnrolled($userId, $courseId)) {
             return false;
         }
