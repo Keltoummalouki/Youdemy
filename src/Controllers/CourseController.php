@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Classes\Course;
 use App\Models\CourseModel;
+use App\Services\SessionManager;
+
 
 class CourseController {
     
@@ -15,8 +17,7 @@ class CourseController {
             $course_id = $newCourse->addCourse($title, $description, $content, $category_id, $user_id, $tags);
             
             if ($course_id) {
-
-                header("Location: ../courses/dashboard.php?id=" . $course_id);
+                header("Location: ./dashboard.php");
                 exit();
             } else {
                 header("Location: ../courses/add.php?error=creation_failed");

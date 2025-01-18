@@ -1,4 +1,3 @@
-
 <?php
 require_once '../../../vendor/autoload.php';
 
@@ -13,8 +12,8 @@ $conn = $db->connect();
 
 $totalTeachers = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Teacher'")->fetchColumn();
 $totalStudents = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Student'")->fetchColumn();
-$totalCourses = $conn->query("SELECT COUNT(*) FROM courses")->fetchColumn();
-$totalVisitors = $conn->query("SELECT COUNT(*) FROM users")->fetchColumn();; 
+$totalCourses = $conn->query("SELECT COUNT(*) FROM courses WHERE user_id = " . $user['id'])->fetchColumn();
+$totalVisitors = $conn->query("SELECT COUNT(*) FROM users")->fetchColumn();
 
 $courses = $conn->query("SELECT 
             c.id, 
@@ -35,12 +34,13 @@ $courses = $conn->query("SELECT
             CourseTag ct ON c.id = ct.course_id
         LEFT JOIN 
             TAGS t ON ct.tag_id = t.id
+        WHERE 
+            c.user_id = " . $user['id'] . "
         GROUP BY 
             c.id, c.title, c.description, c.content, c.category_id, c.user_id, u.username
         ORDER BY 
             c.title
 ")->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -100,14 +100,7 @@ $courses = $conn->query("SELECT
                         <img src="../../../assets/media/image/teacherblack.png"
                             class="nav-img"
                             alt="institution">
-                        <a href="../candidate/index.php"> Course</a>
-                    </div>
-
-                    <div class="option3 nav-option">
-                        <img src="../../../assets/media/image/studentBlack.png"
-                            class="nav-img"
-                            alt="articles">
-                        <a href="../recruiter/index.php"> Students</a>
+                        <a href="../student/index.php"> Course</a>
                     </div>
 
                     <div class="nav-option option5">

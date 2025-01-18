@@ -25,14 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $category_id = $_POST["course_id"]; 
         $user_id = $_SESSION['user_id'];
 
-        error_log('Creating course with data: ' . print_r([
-            'title' => $title,
-            'content' => $content,
-            'description' => $description,
-            'category_id' => $category_id,
-            'user_id' => $user_id
-        ], true));
-
         $tags = isset($_POST["tags"]) ? $_POST["tags"] : []; 
 
         $courseController = new CourseController();
