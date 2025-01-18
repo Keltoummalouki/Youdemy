@@ -29,6 +29,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['course_id'])) {
         exit(); 
     }
 
+    $courseController = new CourseController();
+    $course = $courseController->getCourseById($courseId);
+
+    if ($course && !empty($course['file_path'])) {
+        $file_path = '../../../' . $course['file_path'];
+        if (file_exists($file_path)) {
+            unlink($file_path);
+        }
+    }
+
     $result = $courseController->deleteCourse($courseId);
 
     if ($result) {

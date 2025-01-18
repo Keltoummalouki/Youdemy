@@ -9,12 +9,12 @@ use App\Services\SessionManager;
 
 class CourseController {
     
-    public function createCourse($title, $description, $content, $category_id, $user_id, $tags) {
+    public function createCourse($title, $description, $content, $category_id, $user_id, $tags, $file_path = null) {
         SessionManager::requireAuth();
         SessionManager::checkRole(['Teacher', 'Admin']);
         try {
             $newCourse = new CourseModel();
-            $course_id = $newCourse->addCourse($title, $description, $content, $category_id, $user_id, $tags);
+            $course_id = $newCourse->addCourse($title, $description, $content, $category_id, $user_id, $tags, $file_path);
             
             if ($course_id) {
                 header("Location: ./dashboard.php");

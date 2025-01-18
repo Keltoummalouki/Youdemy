@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Vérification de la connexion utilisateur
 if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     header('Location: ../auth/login.php');
     exit();
@@ -21,15 +20,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(isset($_POST["title"], $_POST["content"], $_POST["description"], $_POST["course_id"])) {
         $title = trim($_POST["title"]);
         $content = trim($_POST["content"]);
-        $description = trim($_POST["description"]);
+        $description = isset($_POST['description']) ? strip_tags(trim($_POST['description'])) : ''; 
         $category_id = $_POST["course_id"]; 
         $user_id = $_SESSION['user_id'];
+
+        $file_path = null;
+        if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = '../../../uploads/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+            $file_name = basename($_FILES['file']['name']);
+            $file_path = $uploadDir . $file_name;
+            if (move_uploaded_file($_FILES['file']['tmp_name'], $file_path)) {
+                $file_path = 'uploads/' . $file_name;
+            } else {
+                $error = "Erreur lors du téléchargement du fichier.";
+            }
+        }
 
         $tags = isset($_POST["tags"]) ? $_POST["tags"] : []; 
 
         $courseController = new CourseController();
         try {
-            $result = $courseController->createCourse($title, $description, $content, $category_id, $user_id, $tags);
+            $result = $courseController->createCourse($title, $description, $content, $category_id, $user_id, $tags, $file_path);
             
             if ($result) {
                 $_SESSION['success_message'] = "Cours créé avec succès!";
@@ -78,31 +92,26 @@ try {
             </div>
         <?php endif; ?>
 
-        <form method="POST" action="" id="form-add" class="course-form">
-            <h1>Ajouter un cours</h1>
+        <form method="POST" action="" id="form-add" class="course-form" enctype="multipart/form-data">
+            <h1>Add course</h1>
             
             <div class="input-box">
                 <input type="text" 
-                       placeholder="Titre du cours" 
-                       name="title" 
-                       required 
-                       value="<?php echo isset($_POST['title']) ? htmlspecialchars($_POST['title']) : ''; ?>">
+                    placeholder="Titre du cours" 
+                    name="title" 
+                    required 
+                    value="<?php echo isset($_POST['title']) ? htmlspecialchars($_POST['title']) : ''; ?>">
             </div>
 
             <div class="input-box">
                 <input type="text" 
-                       placeholder="URL de l'image du cours" 
-                       name="content" 
-                       required 
-                       value="<?php echo isset($_POST['content']) ? htmlspecialchars($_POST['content']) : ''; ?>">
+                    placeholder="URL de l'image du cours" 
+                    name="content" 
+                    required 
+                    value="<?php echo isset($_POST['content']) ? htmlspecialchars($_POST['content']) : ''; ?>">
             </div>
 
-            <div class="input-box">
-                <div id="editor-container">
-                    <div id="editor"><?php echo isset($_POST['description']) ? $_POST['description'] : ''; ?></div>
-                </div>
-                <input type="hidden" name="description" id="description-input">
-            </div>
+            <div class="input
 
             <div class="input-box">
                 <select name="course_id" class="input-select" required>
@@ -121,13 +130,17 @@ try {
                     <?php foreach ($tags as $tag): ?>
                         <label class='tag-checkbox'>
                             <input type='checkbox' 
-                                   name='tags[]' 
-                                   value='<?php echo htmlspecialchars($tag['id']); ?>'
-                                   <?php echo (isset($_POST['tags']) && in_array($tag['id'], $_POST['tags'])) ? 'checked' : ''; ?>>
+                                name='tags[]' 
+                                value='<?php echo htmlspecialchars($tag['id']); ?>'
+                                <?php echo (isset($_POST['tags']) && in_array($tag['id'], $_POST['tags'])) ? 'checked' : ''; ?>>
                             <span class='tag-label'><?php echo htmlspecialchars($tag['tag']); ?></span>
                         </label>
                     <?php endforeach; ?>
                 </div>
+            </div>
+
+            <div class="input-box">
+                <input type="file" name="file" accept="video/*,image/*,application/pdf">
             </div>
 
             <button type="submit" class="btn" name="submit-btn">add coures</button>
