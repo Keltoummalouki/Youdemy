@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Config\DatabaseConnexion;
+use PDO;
+use PDOException;
 
 class CourseEnrollment {
     private $connexion;
@@ -31,9 +33,9 @@ class CourseEnrollment {
     }
 
     public function getCourseDetails($courseId) {
-        $query = "SELECT c.*, u.name as instructor_name 
-                 FROM Courses c 
-                 LEFT JOIN Users u ON c.instructor_id = u.id 
+        $query = "SELECT c.*, u.username as instructor_name 
+                 FROM COURSES c 
+                 LEFT JOIN USERS u ON c.user_id = u.id 
                  WHERE c.id = :course_id";
         
         $stmt = $this->connexion->prepare($query);
@@ -43,6 +45,7 @@ class CourseEnrollment {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Add this method to check if a user is enrolled
     public function isEnrolled($userId, $courseId) {
         $query = "SELECT COUNT(*) FROM CourseEnrollments 
                  WHERE user_id = :user_id AND course_id = :course_id";

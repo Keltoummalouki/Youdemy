@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Controllers;
 
@@ -15,18 +15,17 @@ class EnrollmentController {
         $this->enrollmentModel = new CourseEnrollment($db);
     }
 
-
     public function enrollCourse($userId, $courseId) {
         if (!$userId || !$courseId) {
             return false;
         }
-
-        if ($this->enrollmentModel->isEnrolled($userId, $courseId)) {
+        
+        if ($this->isEnrolled($userId, $courseId)) {
             return false;
         }
 
         $courseDetails = $this->getCourseDetails($courseId);
-        if (!$courseDetails || !$courseDetails['is_active']) {
+        if (!$courseDetails) {
             return false;
         }
 
@@ -44,14 +43,15 @@ class EnrollmentController {
             return null;
         }
 
-
         return [
             'id' => $course['id'],
             'title' => $course['title'],
             'instructor' => $course['instructor_name'],
-            'duration' => $course['duration'] ?? null,
             'description' => $course['description'] ?? null,
-            'is_active' => $course['is_active'] ?? true
         ];
+    }
+
+    public function isEnrolled($userId, $courseId) {
+        return $this->enrollmentModel->isEnrolled($userId, $courseId);
     }
 }

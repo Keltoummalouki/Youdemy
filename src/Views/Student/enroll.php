@@ -1,13 +1,11 @@
 <?php
 require_once '../../../vendor/autoload.php';
-         
+
 use App\Controllers\EnrollmentController;
 use App\Services\SessionManager;
 
-// Enable session
 session_start();
 
-// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../../auth/login.php");
     exit();
@@ -17,7 +15,6 @@ $enrollmentController = new EnrollmentController();
 $course = null;
 $error = null;
 
-// Get course details from URL parameter
 if (isset($_GET['course_id'])) {
     $courseId = filter_var($_GET['course_id'], FILTER_VALIDATE_INT);
     if ($courseId === false) {
@@ -30,7 +27,6 @@ if (isset($_GET['course_id'])) {
     }
 }
 
-// Handle enrollment submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['course_id'])) {
         $error = "Missing required information.";
@@ -41,8 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($courseId === false) {
             $error = "Invalid course ID.";
         } else {
-            // Check if already enrolled
-            if ($enrollmentController->enrollmentModel->isEnrolled($userId, $courseId)) {
+            if ($enrollmentController->isEnrolled($userId, $courseId)) {
                 $error = "You are already enrolled in this course.";
             } else {
                 $result = $enrollmentController->enrollCourse($userId, $courseId);
