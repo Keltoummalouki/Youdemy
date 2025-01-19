@@ -13,13 +13,29 @@ $tags = $conn->query("SELECT id, tag FROM TAGS")->fetchAll(PDO::FETCH_ASSOC);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $courseId = $_POST["courseId"] ?? null;
     $title = trim($_POST["title"] ?? '');
-    $description = trim($_POST["description"] ?? '');
+    $description = strip_tags(trim($_POST["description"] ?? ''));
+    $description = strip_tags(trim($_POST["description"])); 
     $content = trim($_POST["content"] ?? '');
     $category_id = $_POST["category_id"] ?? null;
     $tags = $_POST["tags"] ?? [];
 
+    $file_path = $course['file_path'] ?? null;
+    if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = '../../../uploads/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        $file_name = basename($_FILES['file']['name']);
+        $file_path = $uploadDir . $file_name;
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $file_path)) {
+            $file_path = 'uploads/' . $file_name;
+        } else {
+            $error = "Erreur lors du téléchargement du fichier.";
+        }
+    }
+
     $courseController = new CourseController();
-    $result = $courseController->updateCourse($courseId, $title, $description, $content, $category_id, $tags);
+    $result = $courseController->updateCourse($courseId, $title, $description, $content, $category_id, $tags, $file_path);
 
     if ($result) {
         header('Location: ./dashboard.php');
@@ -56,64 +72,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
 <body>
     <a href="./dashboard.php"><img src="../../../assets/media/image/fleche-gauche.png" alt="return" class="return-icon"></a>
     <div class="container">
-        <form method="POST" action="" id="form-edit">
-            <h1>Edit Course</h1>
-            <input type="hidden" name="courseId" value="<?= htmlspecialchars($courseId) ?>">
-            
-            <div class="input-box">
-                <input type="text" 
-                       placeholder="Title" 
-                       name="title" 
-                       value="<?= htmlspecialchars($course['title'] ?? '') ?>" 
-                       required>
-                <box-icon type='solid' name='user-circle'></box-icon>
-            </div>
+    <form method="POST" action="" id="form-edit" enctype="multipart/form-data">
+        <h1>Edit Course</h1>
+        <input type="hidden" name="courseId" value="<?= htmlspecialchars($courseId) ?>">
+        
+        <div class="input-box">
+            <input type="text" 
+                placeholder="Title" 
+                name="title" 
+                value="<?= htmlspecialchars($course['title'] ?? '') ?>" 
+                required>
+        </div>
 
-            <div class="input-box">
-                <input type="text" 
-                       placeholder="Content" 
-                       name="content" 
-                       value="<?= htmlspecialchars($course['content'] ?? '') ?>" 
-                       required>
-                <box-icon type='solid' name='user-circle'></box-icon>
-            </div>
+        <div class="input-box">
+            <input type="text" 
+                placeholder="Content" 
+                name="content" 
+                value="<?= htmlspecialchars($course['content'] ?? '') ?>" 
+                required>
+        </div>
 
-            <div class="input-box">
-                <div id="editor-container">
-                    <div id="editor"><?= htmlspecialchars($course['description'] ?? '') ?></div>
-                </div>
-                <input type="hidden" name="description" id="description-input">
-                <box-icon type='solid' name='user-circle'></box-icon>
+        <div class="input-box">
+            <div id="editor-container">
+                <div id="editor"><?= htmlspecialchars($course['description'] ?? '') ?></div>
             </div>
+            <input type="hidden" name="description" id="description-input">
+        </div>
 
-            <div class="input-box">
-                <select name="category_id" class="input-select" required>
-                    <option value="">Select Category</option>
-                    <?php foreach ($categories as $category): ?>
-                        <option value="<?= htmlspecialchars($category['id']) ?>"
-                                <?= ($course['category_id'] ?? '') == $category['id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($category['category']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+        <div class="input-box">
+            <select name="category_id" class="input-select" required>
+                <option value="">Select Category</option>
+                <?php foreach ($categories as $category): ?>
+                    <option value="<?= htmlspecialchars($category['id']) ?>"
+                            <?= ($course['category_id'] ?? '') == $category['id'] ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($category['category']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="input-box">
+            <div class="tags-container">
+                <?php foreach ($tags as $tag): ?>
+                    <label class="tag-checkbox">
+                        <input type="checkbox" 
+                            name="tags[]" 
+                            value="<?= htmlspecialchars($tag['id']) ?>"
+                            <?= in_array($tag['id'], $currentTags ?? []) ? 'checked' : '' ?>>
+                        <span class="tag-label"><?= htmlspecialchars($tag['tag']) ?></span>
+                    </label>
+                <?php endforeach; ?>
             </div>
+        </div>
 
-            <div class="input-box">
-                <div class="tags-container">
-                    <?php foreach ($tags as $tag): ?>
-                        <label class="tag-checkbox">
-                            <input type="checkbox" 
-                                   name="tags[]" 
-                                   value="<?= htmlspecialchars($tag['id']) ?>"
-                                   <?= in_array($tag['id'], $currentTags ?? []) ? 'checked' : '' ?>>
-                            <span class="tag-label"><?= htmlspecialchars($tag['tag']) ?></span>
-                        </label>
-                    <?php endforeach; ?>
-                </div>
-            </div>
+        <div class="input-box">
+            <input type="file" name="file" accept="video/*,image/*,application/pdf">
+        </div>
 
-            <button type="submit" class="btn" name="submit-btn">Update Course</button>
-        </form>
+        <button type="submit" class="btn" name="submit-btn">Update Course</button>
+    </form>
     </div>
 
     <script src="../../../assets/js/form.js"></script>

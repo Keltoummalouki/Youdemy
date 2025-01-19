@@ -13,24 +13,24 @@ class CourseModel {
         $this->connexion = $db->connect();
     }
 
-    public function addCourse($title, $description, $content, $category_id, $user_id, $tags) {
+    public function addCourse($title, $description, $content, $category_id, $user_id, $tags, $file_path = null) {
         try {
-
             $this->connexion->beginTransaction();
-
-            $query = "INSERT INTO COURSES (title, description, content, category_id, user_id) 
-                     VALUES (:title, :description, :content, :category_id, :user_id)";
-
+    
+            $query = "INSERT INTO COURSES (title, description, content, category_id, user_id, file_path) 
+                     VALUES (:title, :description, :content, :category_id, :user_id, :file_path)";
+    
             $stmt = $this->connexion->prepare($query);
             $stmt->bindParam(':title', $title);
             $stmt->bindParam(':description', $description);
             $stmt->bindParam(':content', $content);
             $stmt->bindParam(':category_id', $category_id);
             $stmt->bindParam(':user_id', $user_id);
+            $stmt->bindParam(':file_path', $file_path);
             $stmt->execute();
-
+    
             $course_id = $this->connexion->lastInsertId();
-
+    
             if (!empty($tags)) {
                 $tagQuery = "INSERT INTO CourseTag (course_id, tag_id) VALUES (:course_id, :tag_id)";
                 $tagStmt = $this->connexion->prepare($tagQuery);
@@ -41,10 +41,10 @@ class CourseModel {
                     $tagStmt->execute();
                 }
             }
-
+    
             $this->connexion->commit();
             return $course_id;
-
+    
         } catch (PDOException $e) {
             $this->connexion->rollBack();
             error_log("Database error: " . $e->getMessage());
@@ -98,7 +98,7 @@ class CourseModel {
 
             $sql = "UPDATE COURSES 
                    SET title = :title, 
-                       description = :description, 
+                       `description` = :description,
                        content = :content, 
                        category_id = :category_id
                    WHERE id = :courseId";
@@ -184,5 +184,19 @@ class CourseModel {
             return [];
         }
     }
+
+    public function enrollStudent($student_id, $course_id) {
+        try {
+            $query = "INSERT INTO Enrollments (student_id, course_id) VALUES (:student_id, :course_id)";
+            $stmt = $this->connexion->prepare($query);
+            $stmt->bindParam(':student_id', $student_id);
+            $stmt->bindParam(':course_id', $course_id);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return false;
+        }
+    }
+    
     
 }
