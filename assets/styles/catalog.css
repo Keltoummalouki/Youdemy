@@ -1,0 +1,378 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root {
+    --background-color1: #fafaff;
+    --background-color2: #ffffff;
+    --background-color3: #ededed;
+    --background-color4: #cad7fda4;
+    --primary-color: #4b49ac;
+    --secondary-color: #0c007d;
+    --Border-color: #3f0097;
+    --one-use-color: #3f0097;
+    --two-use-color: #5500cb;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+background-color: var(--background-color4);
+max-width: 100%;
+overflow-x: hidden;
+}
+
+header {
+height: 70px;
+width: 100vw;
+padding: 0 30px;
+background-color: var(--background-color1);
+z-index: 100;
+box-shadow: 1px 1px 15px rgba(161, 182, 253, 0.825);
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+
+.icn {
+height: 30px;
+}
+.menuicn {
+cursor: pointer;
+}
+
+.searchbar,
+.message,
+.logosec {
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.logo span {
+    color: #3498db;
+}
+
+.searchbar2 {
+display: none;
+}
+
+.logosec {
+gap: 60px;
+}
+
+.searchbar input {
+width: 250px;
+height: 42px;
+border-radius: 50px 0 0 50px;
+background-color: var(--background-color3);
+padding: 0 20px;
+font-size: 15px;
+outline: none;
+border: none;
+}
+.searchbtn {
+width: 50px;
+height: 42px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 0px 50px 50px 0px;
+background-color: var(--secondary-color);
+cursor: pointer;
+}
+
+.message {
+gap: 40px;
+position: relative;
+cursor: pointer;
+}
+.circle {
+height: 7px;
+width: 7px;
+position: absolute;
+background-color: #fa7bb4;
+border-radius: 50%;
+left: 19px;
+top: 8px;
+}
+.dp {
+height: 40px;
+width: 40px;
+background-color: #626262;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+}
+.main-container {
+display: flex;
+width: 100vw;
+position: relative;
+top: 70px;
+z-index: 1;
+}
+.dpicn {
+height: 42px;
+}
+
+.main-content {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.categories {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    overflow-x: auto;
+    padding: 0.5rem 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+}
+
+.categories::-webkit-scrollbar {
+    height: 6px;
+}
+
+.categories::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 6px;
+}
+
+.category-btn {
+    padding: 0.7rem 1.5rem;
+    background-color: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    color: var(--primary-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.category-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.tag-btn {
+    padding: 5px 8px;
+    margin-top: 10px;
+    background-color: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    color: var(--primary-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.tag-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.course-card {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.course-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.course-info {
+    padding: 1.5rem;
+}
+
+.course-title {
+    font-size: 1.2rem;
+    color: #1c1d1f;
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+}
+
+.course-instructor {
+    color: #6a6f73;
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+}
+
+.course-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.rating-stars {
+    color: #b4690e;
+    font-size: 1.1rem;
+}
+
+.enroll-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: #3498db; 
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.enroll-btn:hover {
+    background-color: #2ecc71; 
+}
+
+.enroll-btn a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.pagination-btn {
+    padding: 0.8rem 1.2rem;
+    border: 1px solid var(--primary-color);
+    background-color: white;
+    color: var(--primary-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.pagination-btn:hover:not(.active) {
+    background-color: var(--background-color3);
+}
+
+.category-btn {
+    padding: 8px 16px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.category-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+.course-card {
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.course-card.hidden {
+    display: none;
+}
+
+.filter-clear {
+    padding: 8px 16px;
+    margin: 5px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.course-category {
+    color: #666;
+    font-size: 0.9em;
+    margin: 5px 0;
+}
+
+.active {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header {
+        padding: 0 15px;
+    }
+
+    .searchbar input {
+        width: 200px;
+    }
+
+    .main-content {
+        padding: 0 1rem;
+    }
+
+    .courses-grid {
+        gap: 1rem;
+    }
+
+    .category-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .searchbar input {
+        width: 150px;
+    }
+
+    .course-card {
+        margin: 0 -1rem;
+    }
+}

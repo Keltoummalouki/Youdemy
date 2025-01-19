@@ -1,4 +1,10 @@
 <?php
+
+require_once '../../../vendor/autoload.php';
+
+use App\Controllers\CourseController;
+use App\Config\DatabaseConnexion;
+use App\Services\SessionManager;
 session_start();
 
 if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
@@ -6,10 +12,7 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     exit();
 }
 
-require_once '../../../vendor/autoload.php';
 
-use App\Controllers\CourseController;
-use App\Config\DatabaseConnexion;
 
 $db = new DatabaseConnexion();
 $conn = $db->connect();

@@ -8,5 +8,4 @@ namespace App\Classes;
             parent::__construct($id,$username,$email,$password,$role);
         }
 
-
     }

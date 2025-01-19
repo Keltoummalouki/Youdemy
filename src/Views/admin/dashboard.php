@@ -102,7 +102,7 @@ $users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
                         <img src="../../../assets/media/image/report.png"
                             class="nav-img"
                             alt="raport">
-                        <h3> Report</h3>
+                            <a href="./statistics.php"> Statistiques</a>
                     </div>
 
                     <div class="nav-option option6">

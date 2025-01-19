@@ -41,6 +41,21 @@ class TagController {
         return $result;
     }
 
+    public function addMultipleTags($tags) {
+        try {
+            $this->connexion->beginTransaction();
+            foreach ($tags as $tag) {
+                $this->addTag($tag);
+            }
+            $this->connexion->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->connexion->rollBack();
+            error_log("Database error: " . $e->getMessage());
+            return false;
+        }
+    }
+
 
 }
 

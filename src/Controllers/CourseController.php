@@ -6,7 +6,6 @@ use App\Classes\Course;
 use App\Models\CourseModel;
 use App\Services\SessionManager;
 
-
 class CourseController {
     
     public function createCourse($title, $description, $content, $category_id, $user_id, $tags, $file_path = null) {
@@ -17,6 +16,7 @@ class CourseController {
             $course_id = $newCourse->addCourse($title, $description, $content, $category_id, $user_id, $tags, $file_path);
             
             if ($course_id) {
+              
                 header("Location: ./dashboard.php");
                 exit();
             } else {
@@ -54,13 +54,25 @@ class CourseController {
         return $result;
     }
 
+    public function catalog() {
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    
+        $perPage = 10;
+        $courseModel = new CourseModel();
+    
+        $courses = $courseModel->getPaginatedCourses($page, $perPage);
+    
+        $totalCourses = $courseModel->getTotalCourses();
+        $totalPages = ceil($totalCourses / $perPage);
+      
     public function enrollStudent($student_id, $course_id) {
         $courseModel = new CourseModel();
         return $courseModel->enrollStudent($student_id, $course_id);
     }
 
 
+        require_once '../Views/student/index.php';
+    }
 
 
 }
-

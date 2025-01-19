@@ -65,4 +65,4 @@ namespace App\Classes;
             $this->status = $status;
         }
 
-    }
+}

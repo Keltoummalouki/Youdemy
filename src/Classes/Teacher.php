@@ -8,5 +8,5 @@ namespace App\Classes;
         public function __construct($id,$username,$email,$password,$role){
             parent::__construct($id,$username,$email,$password,$role);
         }
-
+    
     }
