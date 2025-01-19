@@ -98,7 +98,7 @@ class CourseModel {
 
             $sql = "UPDATE COURSES 
                    SET title = :title, 
-                       description = :description, 
+                       `description` = :description,
                        content = :content, 
                        category_id = :category_id
                    WHERE id = :courseId";
@@ -184,5 +184,19 @@ class CourseModel {
             return [];
         }
     }
+
+    public function enrollStudent($student_id, $course_id) {
+        try {
+            $query = "INSERT INTO Enrollments (student_id, course_id) VALUES (:student_id, :course_id)";
+            $stmt = $this->connexion->prepare($query);
+            $stmt->bindParam(':student_id', $student_id);
+            $stmt->bindParam(':course_id', $course_id);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return false;
+        }
+    }
+    
     
 }

@@ -24,11 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $category_id = $_POST["course_id"]; 
         $user_id = $_SESSION['user_id'];
 
-        $file_path = null;
         if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = '../../../uploads/';
             if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
+                if (!mkdir($uploadDir, 0777, true)) {
+                    $error = "Failed to create upload directory.";
+                }
             }
             $file_name = basename($_FILES['file']['name']);
             $file_path = $uploadDir . $file_name;
@@ -111,7 +112,12 @@ try {
                     value="<?php echo isset($_POST['content']) ? htmlspecialchars($_POST['content']) : ''; ?>">
             </div>
 
-            <div class="input
+            <div class="input-box">
+                <div id="editor-container">
+                    <div id="editor"><?php echo isset($_POST['description']) ? $_POST['description'] : ''; ?></div>
+                </div>
+                <input type="hidden" name="description" id="description-input">
+            </div>
 
             <div class="input-box">
                 <select name="course_id" class="input-select" required>

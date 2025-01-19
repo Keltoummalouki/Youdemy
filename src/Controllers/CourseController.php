@@ -39,15 +39,12 @@ class CourseController {
         return $result;
     }
 
-    public function updateCourse($courseId, $title, $description, $content, $category_id, $tags)  {
-
-        $updateCourse= new CourseModel();
-
-        $result = $updateCourse->editCourse($courseId, $title, $description, $content, $category_id, $tags);
-
+    public function updateCourse($courseId, $title, $description, $content, $category_id, $tags, $file_path = null) {
+        $updateCourse = new CourseModel();
+        $result = $updateCourse->editCourse($courseId, $title, $description, $content, $category_id, $tags, $file_path);
         return $result;
     }
-
+    
     public function getCourseById($courseId) {
 
         $updateCourse= new CourseModel();
@@ -56,6 +53,12 @@ class CourseController {
         
         return $result;
     }
+
+    public function enrollStudent($student_id, $course_id) {
+        $courseModel = new CourseModel();
+        return $courseModel->enrollStudent($student_id, $course_id);
+    }
+
 
 
 

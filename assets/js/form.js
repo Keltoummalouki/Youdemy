@@ -10,8 +10,7 @@ const quill = new Quill('#editor', {
     }
 });
 
-document.getElementById('form-add').onsubmit = function () {
-    var editor = document.getElementById('editor');
-    var descriptionInput = document.getElementById('description-input');
-    descriptionInput.value = editor.innerHTML; 
-};
+document.getElementById('form-edit').addEventListener('submit', function() {
+    const description = quill.root.innerHTML;
+    document.getElementById('description-input').value = description;
+});
