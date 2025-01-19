@@ -16,10 +16,10 @@ class CourseModel {
     public function addCourse($title, $description, $content, $category_id, $user_id, $tags, $file_path = null) {
         try {
             $this->connexion->beginTransaction();
-    
+        
             $query = "INSERT INTO COURSES (title, description, content, category_id, user_id, file_path) 
                      VALUES (:title, :description, :content, :category_id, :user_id, :file_path)";
-    
+        
             $stmt = $this->connexion->prepare($query);
             $stmt->bindParam(':title', $title);
             $stmt->bindParam(':description', $description);
@@ -28,9 +28,9 @@ class CourseModel {
             $stmt->bindParam(':user_id', $user_id);
             $stmt->bindParam(':file_path', $file_path);
             $stmt->execute();
-    
+        
             $course_id = $this->connexion->lastInsertId();
-    
+        
             if (!empty($tags)) {
                 $tagQuery = "INSERT INTO CourseTag (course_id, tag_id) VALUES (:course_id, :tag_id)";
                 $tagStmt = $this->connexion->prepare($tagQuery);
@@ -41,14 +41,15 @@ class CourseModel {
                     $tagStmt->execute();
                 }
             }
-    
+        
             $this->connexion->commit();
+            error_log("Course added successfully with ID: " . $course_id);
             return $course_id;
-    
+        
         } catch (PDOException $e) {
             $this->connexion->rollBack();
             error_log("Database error: " . $e->getMessage());
-            return null;
+            return false;
         }
     }
 
@@ -92,30 +93,32 @@ class CourseModel {
         }
     }
     
-    public function editCourse($courseId, $title, $description, $content, $category_id, $tags) {
+    public function editCourse($courseId, $title, $description, $content, $category_id, $tags, $file_path = null) {
         try {
             $this->connexion->beginTransaction();
-
+    
             $sql = "UPDATE COURSES 
                    SET title = :title, 
                        `description` = :description,
                        content = :content, 
-                       category_id = :category_id
+                       category_id = :category_id,
+                       file_path = :file_path
                    WHERE id = :courseId";
-
+    
             $stmt = $this->connexion->prepare($sql);
             $stmt->bindParam(':courseId', $courseId, PDO::PARAM_INT);
             $stmt->bindParam(':title', $title);
             $stmt->bindParam(':description', $description);
             $stmt->bindParam(':content', $content);
             $stmt->bindParam(':category_id', $category_id);
+            $stmt->bindParam(':file_path', $file_path);
             $stmt->execute();
-
+    
             $deleteTagsQuery = "DELETE FROM CourseTag WHERE course_id = :courseId";
             $deleteStmt = $this->connexion->prepare($deleteTagsQuery);
             $deleteStmt->bindParam(':courseId', $courseId);
             $deleteStmt->execute();
-
+    
             if (!empty($tags)) {
                 $tagQuery = "INSERT INTO CourseTag (course_id, tag_id) VALUES (:course_id, :tag_id)";
                 $tagStmt = $this->connexion->prepare($tagQuery);
@@ -126,10 +129,10 @@ class CourseModel {
                     $tagStmt->execute();
                 }
             }
-
+    
             $this->connexion->commit();
             return true;
-
+    
         } catch (PDOException $e) {
             $this->connexion->rollBack();
             error_log("Database error: " . $e->getMessage());
@@ -173,7 +176,7 @@ class CourseModel {
                      WHERE c.user_id = :user_id
                      GROUP BY c.id
                      ORDER BY c.id DESC";
-                     
+                      
             $stmt = $this->connexion->prepare($query);
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->execute();
@@ -187,26 +190,36 @@ class CourseModel {
 
     public function getStatistics() {
         $statistics = [];
-
-        $statistics['total_courses'] = $this->connexion->query("SELECT COUNT(*) FROM COURSES")->fetchColumn();
-
-        $statistics['courses_by_category'] = $this->connexion->query("
+    
+        // Total courses
+        $stmt = $this->connexion->prepare("SELECT COUNT(*) FROM COURSES");
+        $stmt->execute();
+        $statistics['total_courses'] = $stmt->fetchColumn();
+    
+        // Courses by category
+        $stmt = $this->connexion->prepare("
             SELECT cat.category, COUNT(c.id) as count
             FROM COURSES c
             JOIN CATEGORY cat ON c.category_id = cat.id
             GROUP BY cat.category
-        ")->fetchAll(PDO::FETCH_ASSOC);
-
-        $statistics['most_popular_course'] = $this->connexion->query("
+        ");
+        $stmt->execute();
+        $statistics['courses_by_category'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        // Most popular course
+        $stmt = $this->connexion->prepare("
             SELECT c.title, COUNT(ce.user_id) as enrollments
             FROM CourseEnrollments ce
             JOIN COURSES c ON ce.course_id = c.id
             GROUP BY ce.course_id
             ORDER BY enrollments DESC
             LIMIT 1
-        ")->fetch(PDO::FETCH_ASSOC);
-
-        $statistics['top_teachers'] = $this->connexion->query("
+        ");
+        $stmt->execute();
+        $statistics['most_popular_course'] = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        // Top teachers
+        $stmt = $this->connexion->prepare("
             SELECT u.username, COUNT(c.id) as courses_taught
             FROM COURSES c
             JOIN USERS u ON c.user_id = u.id
@@ -214,8 +227,10 @@ class CourseModel {
             GROUP BY u.id
             ORDER BY courses_taught DESC
             LIMIT 3
-        ")->fetchAll(PDO::FETCH_ASSOC);
-
+        ");
+        $stmt->execute();
+        $statistics['top_teachers'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
         return $statistics;
     }
 
@@ -249,6 +264,14 @@ class CourseModel {
                 c.title
             LIMIT :limit OFFSET :offset
         ";
+    
+        $stmt = $this->connexion->prepare($query);
+        $stmt->bindValue(':limit', (int)$perPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
       
     public function enrollStudent($student_id, $course_id) {
         try {
@@ -261,15 +284,6 @@ class CourseModel {
             error_log("Database error: " . $e->getMessage());
             return false;
         }
-    }
-    
-    
-        $stmt = $this->connexion->prepare($query);
-        $stmt->bindValue(':limit', (int)$perPage, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
-        $stmt->execute();
-    
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
     public function getTotalCourses() {

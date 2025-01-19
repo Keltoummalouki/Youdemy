@@ -41,7 +41,8 @@ class AuthController {
         }
     }
 
-    public function register($username, $email, $password, $role,$status) {
+    public function register($username, $email, $password, $role) {
+        $status = ($role === "Teacher") ? "Not Activated" : "Activated";
         $newUser = new NewUserModel();
         $result = $newUser->addUser($username, $email, $password, $role, $status);
 

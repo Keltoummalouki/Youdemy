@@ -211,7 +211,6 @@ $courses = $conn->query("
                                     <th class="t-op">teacher</th>
                                     <th class="t-op">tags</th>
                                     <th></th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -225,14 +224,6 @@ $courses = $conn->query("
                                                 <td class="output"><?php echo htmlspecialchars($course['teacher']) ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['tags']) ?></td>
                                                 <td>
-                                            <td>
-                                                <form method="POST" action="./delete.php">
-                                                    <input type="hidden" name="player_id" value="<?php echo $course['id']; ?>">
-                                                    <button type="submit" class="delete-btn">
-                                                        <img src="../../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
-                                                    </button>
-                                                </form>
-                                            </td> 
 
                                         </tr>
                                         <?php endforeach; ?>

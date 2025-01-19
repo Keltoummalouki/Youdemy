@@ -16,16 +16,15 @@ class CourseController {
             $course_id = $newCourse->addCourse($title, $description, $content, $category_id, $user_id, $tags, $file_path);
             
             if ($course_id) {
-              
                 header("Location: ./dashboard.php");
                 exit();
             } else {
-                header("Location: ../courses/add.php?error=creation_failed");
+                header("Location: ./add.php");
                 exit();
             }
         } catch (\Exception $e) {
             error_log("Error in createCourse: " . $e->getMessage());
-            header("Location: ../courses/add.php?error=database_error");
+            header("Location: ./add.php");
             exit();
         }
     }
@@ -64,15 +63,14 @@ class CourseController {
     
         $totalCourses = $courseModel->getTotalCourses();
         $totalPages = ceil($totalCourses / $perPage);
+    }
       
     public function enrollStudent($student_id, $course_id) {
         $courseModel = new CourseModel();
         return $courseModel->enrollStudent($student_id, $course_id);
-    }
-
-
         require_once '../Views/student/index.php';
+
     }
 
+    }
 
-}

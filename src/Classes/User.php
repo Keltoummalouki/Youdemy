@@ -17,7 +17,6 @@ namespace App\Classes;
             $this->email = $email;
             $this->password = $password;
             $this->role = $role;
-            $this->role = $role;
             $this->status = $status; 
         }
 

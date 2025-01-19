@@ -5,14 +5,13 @@ require_once '../../../vendor/autoload.php';
 use App\Controllers\CourseController;
 use App\Config\DatabaseConnexion;
 use App\Services\SessionManager;
+
 session_start();
 
 if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     header('Location: ../auth/login.php');
     exit();
 }
-
-
 
 $db = new DatabaseConnexion();
 $conn = $db->connect();
@@ -156,7 +155,27 @@ try {
         </form>
     </div>
 
-    <script src="../../../assets/js/form.js">
+    <script>
+        var quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: 'Enter course description...',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link'],
+                    ['clean']
+                ]
+            }
+        });
+
+        document.getElementById('form-add').onsubmit = function() {
+            var description = quill.root.innerHTML;
+            
+            document.getElementById('description-input').value = description;
+            
+            return true;
+        };
     </script>
 </body>
 </html>
