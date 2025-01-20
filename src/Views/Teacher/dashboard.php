@@ -85,7 +85,6 @@ $courses = $conn->query("SELECT
     </header>
 
     <div class="main-container">
-
         <div class="navcontainer">
             <nav class="nav">
                 <div class="nav-upper-options">

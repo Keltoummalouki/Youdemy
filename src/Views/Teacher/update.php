@@ -14,32 +14,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $courseId = $_POST["courseId"] ?? null;
     $title = trim($_POST["title"] ?? '');
     $description = strip_tags(trim($_POST["description"] ?? ''));
-    $description = strip_tags(trim($_POST["description"])); 
     $content = trim($_POST["content"] ?? '');
     $category_id = $_POST["category_id"] ?? null;
     $tags = $_POST["tags"] ?? [];
 
-    $file_path = $course['file_path'] ?? null;
-    if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../../../uploads/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-        $file_name = basename($_FILES['file']['name']);
-        $file_path = $uploadDir . $file_name;
-        if (move_uploaded_file($_FILES['file']['tmp_name'], $file_path)) {
-            $file_path = 'uploads/' . $file_name;
-        } else {
-            $error = "Erreur lors du téléchargement du fichier.";
-        }
-    }
-
     $courseController = new CourseController();
-    $result = $courseController->updateCourse($courseId, $title, $description, $content, $category_id, $tags, $file_path);
+    $result = $courseController->updateCourse($courseId, $title, $description, $content, $category_id, $tags);
 
     if ($result) {
         header('Location: ./dashboard.php');
-        exit;
+        exit();
     }
 }
 
@@ -85,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
         </div>
 
         <div class="input-box">
-            <input type="text" 
+            <input type="url" 
                 placeholder="Content" 
                 name="content" 
                 value="<?= htmlspecialchars($course['content'] ?? '') ?>" 
@@ -125,14 +109,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
             </div>
         </div>
 
-        <div class="input-box">
-            <input type="file" name="file" accept="video/*,image/*,application/pdf">
-        </div>
-
         <button type="submit" class="btn" name="submit-btn">Update Course</button>
     </form>
     </div>
 
-    <script src="../../../assets/js/form.js"></script>
+    <script>
+        const quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline'],
+                [{ 'header': [1, 2, 3, false] }],
+                ['link', 'image'],
+                ['clean']
+            ]
+        }
+    });
+
+    document.getElementById('form-edit').addEventListener('submit', function() {
+        const description = quill.root.innerHTML;
+        document.getElementById('description-input').value = description;
+    });
+    </script>
 </body>
 </html>

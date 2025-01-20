@@ -2,11 +2,14 @@
 namespace App\Services;
 
 class SessionManager {
+    
     public static function startSession() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
     }
+    
+
 
     public static function isLoggedIn() {
         self::startSession();
@@ -20,7 +23,7 @@ class SessionManager {
             exit();
         }
     }
-
+    
     public static function setUser($userId, $username, $role) {
         self::startSession();
         $_SESSION['user_id'] = $userId;

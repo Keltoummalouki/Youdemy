@@ -23,14 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['course_id'])) {
     $courseId = filter_var($_POST['course_id'], FILTER_VALIDATE_INT);
-
     if ($courseId === false) {
-        echo "Invalid course ID.";
-        exit(); 
+        $error = "Invalid course ID.";
+        exit();
     }
 
     $result = $courseController->deleteCourse($courseId);
-
     if ($result) {
         header("Location: ./dashboard.php");
         exit();
@@ -38,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['course_id'])) {
         $error = "Error deleting course.";
     }
 }
+
 ?>
 
 <!DOCTYPE html>

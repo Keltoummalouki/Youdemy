@@ -244,3 +244,252 @@ height: 42px;
         grid-template-columns: 1fr;
     }
 }
+
+.main-content {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.categories {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    overflow-x: auto;
+    padding: 0.5rem 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+}
+
+.categories::-webkit-scrollbar {
+    height: 6px;
+}
+
+.categories::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 6px;
+}
+
+.category-btn {
+    padding: 0.7rem 1.5rem;
+    background-color: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    color: var(--primary-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.category-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.tag-btn {
+    padding: 5px 8px;
+    margin-top: 10px;
+    background-color: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    color: var(--primary-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.tag-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.course-card {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.course-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.course-info {
+    padding: 1.5rem;
+}
+
+.course-title {
+    font-size: 1.2rem;
+    color: #1c1d1f;
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+}
+
+.course-instructor {
+    color: #6a6f73;
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+}
+
+.course-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.rating-stars {
+    color: #b4690e;
+    font-size: 1.1rem;
+}
+
+.enroll-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: #3498db; 
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.enroll-btn:hover {
+    background-color: #2ecc71; 
+}
+
+.enroll-btn a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.pagination-btn {
+    padding: 0.8rem 1.2rem;
+    border: 1px solid var(--primary-color);
+    background-color: white;
+    color: var(--primary-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.pagination-btn:hover:not(.active) {
+    background-color: var(--background-color3);
+}
+
+.category-btn {
+    padding: 8px 16px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.category-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+.course-card {
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.course-card.hidden {
+    display: none;
+}
+
+.filter-clear {
+    padding: 8px 16px;
+    margin: 5px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.course-category {
+    color: #666;
+    font-size: 0.9em;
+    margin: 5px 0;
+}
+
+.active {
+    background-color: #007bff;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 0 15px;
+    }
+
+    .searchbar input {
+        width: 200px;
+    }
+
+    .main-content {
+        padding: 0 1rem;
+    }
+
+    .courses-grid {
+        gap: 1rem;
+    }
+
+    .category-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .searchbar input {
+        width: 150px;
+    }
+
+    .course-card {
+        margin: 0 -1rem;
+    }
+}

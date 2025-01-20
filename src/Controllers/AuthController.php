@@ -23,15 +23,15 @@ class AuthController {
                 case "Teacher":
                     if($user->getStatus() == "Activated"){ 
                         header("Location: ../teacher/dashboard.php");
-                    }else {
+                    } else {
                         header("Location: ../auth/accountStatus.php");
                     }
                     exit();
                 case "Student":
                     if($user->getStatus() == "Activated"){ 
                         header("Location: ../student/index.php");
-                    }else{
-                        header("Location: ../auth/accountStatus.php"); 
+                    } else {
+                        header("Location: ../auth/accountStatus.php");
                     }
                     exit();
             }
@@ -40,7 +40,7 @@ class AuthController {
             exit();
         }
     }
-
+    
     public function register($username, $email, $password, $role) {
         $status = ($role === "Teacher") ? "Not Activated" : "Activated";
         $newUser = new NewUserModel();

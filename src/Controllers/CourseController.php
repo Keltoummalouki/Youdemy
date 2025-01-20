@@ -8,12 +8,12 @@ use App\Services\SessionManager;
 
 class CourseController {
     
-    public function createCourse($title, $description, $content, $category_id, $user_id, $tags, $file_path = null) {
+    public function createCourse($title, $description, $content, $category_id, $user_id, $tags) {
         SessionManager::requireAuth();
         SessionManager::checkRole(['Teacher', 'Admin']);
         try {
             $newCourse = new CourseModel();
-            $course_id = $newCourse->addCourse($title, $description, $content, $category_id, $user_id, $tags, $file_path);
+            $course_id = $newCourse->addCourse($title, $description, $content, $category_id, $user_id, $tags);
             
             if ($course_id) {
                 header("Location: ./dashboard.php");
@@ -38,9 +38,9 @@ class CourseController {
         return $result;
     }
 
-    public function updateCourse($courseId, $title, $description, $content, $category_id, $tags, $file_path = null) {
+    public function updateCourse($courseId, $title, $description, $content, $category_id, $tags) {
         $updateCourse = new CourseModel();
-        $result = $updateCourse->editCourse($courseId, $title, $description, $content, $category_id, $tags, $file_path);
+        $result = $updateCourse->editCourse($courseId, $title, $description, $content, $category_id, $tags);
         return $result;
     }
     
@@ -70,6 +70,40 @@ class CourseController {
         return $courseModel->enrollStudent($student_id, $course_id);
         require_once '../Views/student/index.php';
 
+    }
+
+    
+    public function myCourses() {
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: ../../auth/login.php");
+            exit();
+        }
+
+        $student_id = $_SESSION['user_id'];
+        $courseModel = new CourseModel();
+        $enrolledCourses = $courseModel->getEnrolledCourses($student_id);
+
+        require_once 'views/student/my_courses.php';
+    }
+
+    public function getEnrolledCourses($student_id) {
+        try {
+            $query = "SELECT c.*, cat.category as category_name, u.username as teacher_name
+                      FROM COURSES c
+                      JOIN Enrollments e ON c.id = e.course_id
+                      LEFT JOIN CATEGORY cat ON c.category_id = cat.id
+                      LEFT JOIN USERS u ON c.user_id = u.id
+                      WHERE e.student_id = :student_id";
+            
+            $stmt = $this->connexion->prepare($query);
+            $stmt->bindParam(':student_id', $student_id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return [];
+        }
     }
 
     }

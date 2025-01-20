@@ -16,16 +16,16 @@ class TagModel {
 
     public function addTag($tag) {
         try {
-
             $query = "INSERT INTO TAGS (tag)
-                        VALUES (:tag);";
-
+                     VALUES (:tag);";
+    
             $stmt = $this->connexion->prepare($query);
             $stmt->bindParam(':tag', $tag);
             $stmt->execute();
-
+    
             return $this->connexion->lastInsertId();
         } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
             return null; 
         }
     }

@@ -23,30 +23,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $title = trim($_POST["title"]);
         $content = trim($_POST["content"]);
         $description = isset($_POST['description']) ? strip_tags(trim($_POST['description'])) : ''; 
+
         $category_id = $_POST["course_id"]; 
         $user_id = $_SESSION['user_id'];
-
-        if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = '../../../uploads/';
-            if (!is_dir($uploadDir)) {
-                if (!mkdir($uploadDir, 0777, true)) {
-                    $error = "Failed to create upload directory.";
-                }
-            }
-            $file_name = basename($_FILES['file']['name']);
-            $file_path = $uploadDir . $file_name;
-            if (move_uploaded_file($_FILES['file']['tmp_name'], $file_path)) {
-                $file_path = 'uploads/' . $file_name;
-            } else {
-                $error = "Erreur lors du téléchargement du fichier.";
-            }
-        }
 
         $tags = isset($_POST["tags"]) ? $_POST["tags"] : []; 
 
         $courseController = new CourseController();
         try {
-            $result = $courseController->createCourse($title, $description, $content, $category_id, $user_id, $tags, $file_path);
+            $result = $courseController->createCourse($title, $description, $content, $category_id, $user_id, $tags);
             
             if ($result) {
                 $_SESSION['success_message'] = "Cours créé avec succès!";
@@ -107,8 +92,8 @@ try {
             </div>
 
             <div class="input-box">
-                <input type="text" 
-                    placeholder="URL de l'image du cours" 
+                <input type="url" 
+                    placeholder="Content du cours" 
                     name="content" 
                     required 
                     value="<?php echo isset($_POST['content']) ? htmlspecialchars($_POST['content']) : ''; ?>">
@@ -145,10 +130,6 @@ try {
                         </label>
                     <?php endforeach; ?>
                 </div>
-            </div>
-
-            <div class="input-box">
-                <input type="file" name="file" accept="video/*,image/*,application/pdf">
             </div>
 
             <button type="submit" class="btn" name="submit-btn">add coures</button>

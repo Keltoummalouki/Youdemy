@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Enroll Course</title>
 </head>
 <body>
-    <a href="../dashboard.php">
+    <a href="./index.php">
         <img src="../../../assets/media/image/fleche-gauche.png" alt="return" class="return-icon">
     </a>
     

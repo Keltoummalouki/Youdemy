@@ -13,12 +13,12 @@ class CourseModel {
         $this->connexion = $db->connect();
     }
 
-    public function addCourse($title, $description, $content, $category_id, $user_id, $tags, $file_path = null) {
+    public function addCourse($title, $description, $content, $category_id, $user_id, $tags) {
         try {
             $this->connexion->beginTransaction();
         
-            $query = "INSERT INTO COURSES (title, description, content, category_id, user_id, file_path) 
-                     VALUES (:title, :description, :content, :category_id, :user_id, :file_path)";
+            $query = "INSERT INTO COURSES (title, `description`, content, category_id, user_id) 
+                     VALUES (:title, :description, :content, :category_id, :user_id)";
         
             $stmt = $this->connexion->prepare($query);
             $stmt->bindParam(':title', $title);
@@ -26,7 +26,6 @@ class CourseModel {
             $stmt->bindParam(':content', $content);
             $stmt->bindParam(':category_id', $category_id);
             $stmt->bindParam(':user_id', $user_id);
-            $stmt->bindParam(':file_path', $file_path);
             $stmt->execute();
         
             $course_id = $this->connexion->lastInsertId();
@@ -93,7 +92,7 @@ class CourseModel {
         }
     }
     
-    public function editCourse($courseId, $title, $description, $content, $category_id, $tags, $file_path = null) {
+    public function editCourse($courseId, $title, $description, $content, $category_id, $tags) {
         try {
             $this->connexion->beginTransaction();
     
@@ -102,7 +101,6 @@ class CourseModel {
                        `description` = :description,
                        content = :content, 
                        category_id = :category_id,
-                       file_path = :file_path
                    WHERE id = :courseId";
     
             $stmt = $this->connexion->prepare($sql);
@@ -111,7 +109,6 @@ class CourseModel {
             $stmt->bindParam(':description', $description);
             $stmt->bindParam(':content', $content);
             $stmt->bindParam(':category_id', $category_id);
-            $stmt->bindParam(':file_path', $file_path);
             $stmt->execute();
     
             $deleteTagsQuery = "DELETE FROM CourseTag WHERE course_id = :courseId";
@@ -191,12 +188,10 @@ class CourseModel {
     public function getStatistics() {
         $statistics = [];
     
-        // Total courses
         $stmt = $this->connexion->prepare("SELECT COUNT(*) FROM COURSES");
         $stmt->execute();
         $statistics['total_courses'] = $stmt->fetchColumn();
     
-        // Courses by category
         $stmt = $this->connexion->prepare("
             SELECT cat.category, COUNT(c.id) as count
             FROM COURSES c
@@ -206,7 +201,6 @@ class CourseModel {
         $stmt->execute();
         $statistics['courses_by_category'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-        // Most popular course
         $stmt = $this->connexion->prepare("
             SELECT c.title, COUNT(ce.user_id) as enrollments
             FROM CourseEnrollments ce
@@ -218,7 +212,6 @@ class CourseModel {
         $stmt->execute();
         $statistics['most_popular_course'] = $stmt->fetch(PDO::FETCH_ASSOC);
     
-        // Top teachers
         $stmt = $this->connexion->prepare("
             SELECT u.username, COUNT(c.id) as courses_taught
             FROM COURSES c
@@ -234,7 +227,7 @@ class CourseModel {
         return $statistics;
     }
 
-    public function getPaginatedCourses($page = 1, $perPage = 10) {
+    public function getPaginatedCourses($page = 1, $perPage = 3) {
         $offset = ($page - 1) * $perPage;
     
         $query = "
@@ -290,6 +283,27 @@ class CourseModel {
         $query = "SELECT COUNT(*) as total FROM COURSES";
         $stmt = $this->connexion->query($query);
         return $stmt->fetchColumn();
+    }
+
+
+    public function getEnrolledCourses($student_id) {
+        try {
+            $query = "SELECT c.*, cat.category as category_name, u.username as teacher_name
+                      FROM COURSES c
+                      JOIN CourseEnrollments e ON c.id = e.course_id
+                      LEFT JOIN CATEGORY cat ON c.category_id = cat.id
+                      LEFT JOIN USERS u ON c.user_id = u.id
+                      WHERE e.user_id = :user_id";
+            
+            $stmt = $this->connexion->prepare($query);
+            $stmt->bindParam(':user_id', $student_id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return [];
+        }
     }
         
 }

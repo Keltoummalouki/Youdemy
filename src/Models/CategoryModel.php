@@ -16,17 +16,16 @@ class CategoryModel {
 
     public function addCategory($category) {
         try {
-
             $query = "INSERT INTO CATEGORY (category)
-                        VALUES (:category);";
-
+                     VALUES (:category);";
+    
             $stmt = $this->connexion->prepare($query);
             $stmt->bindParam(':category', $category);
             $stmt->execute();
-
+    
             return $this->connexion->lastInsertId();
-            
         } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
             return null; 
         }
     }
