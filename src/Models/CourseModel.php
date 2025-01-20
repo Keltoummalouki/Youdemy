@@ -97,11 +97,11 @@ class CourseModel {
             $this->connexion->beginTransaction();
     
             $sql = "UPDATE COURSES 
-                   SET title = :title, 
-                       `description` = :description,
-                       content = :content, 
-                       category_id = :category_id,
-                   WHERE id = :courseId";
+            SET title = :title, 
+                `description` = :description,
+                content = :content, 
+                category_id = :category_id
+            WHERE id = :courseId";
     
             $stmt = $this->connexion->prepare($sql);
             $stmt->bindParam(':courseId', $courseId, PDO::PARAM_INT);

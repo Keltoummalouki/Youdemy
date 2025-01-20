@@ -50,12 +50,9 @@ $tags = $conn->query("SELECT * FROM TAGS")->fetchAll(PDO::FETCH_ASSOC);
             <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
                 class="icn"
                 alt="">
-            <div class="dp">
-                <img src="../../../../assets/media/image/Profil.png"
-                    class="dpicn"
-                    alt="dp">
-                    <a href="../../auth/login.php"></a>
-            </div>
+                <div class="dp">
+                    <a href="./src/Views/auth/login.php"><img src="./assets/media/image/Profil.png" class="dpicn"></a>
+                </div>
         </div>
     </header>
 
@@ -96,7 +93,7 @@ $tags = $conn->query("SELECT * FROM TAGS")->fetchAll(PDO::FETCH_ASSOC);
                         <img src="../../../../assets/media/image/report.png"
                             class="nav-img"
                             alt="raport">
-                        <h3> Report</h3>
+                            <a href="../statistics.php"> Statistiques</a>
                     </div>
 
                     <div class="nav-option option6">
@@ -118,7 +115,6 @@ $tags = $conn->query("SELECT * FROM TAGS")->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <div class="main">
-
             <div class="searchbar2">
                 <input type="text"
                     name=""

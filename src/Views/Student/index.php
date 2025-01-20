@@ -139,7 +139,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Catalogue des cours Youdemy - Plateforme d'apprentissage en ligne">
     <link rel="stylesheet" href="../../../assets/styles/catalog.css">
-    <title>Youdemy - Catalogue de Cours</title>
+    <title>Courses Catalog</title>
 </head>
 <body>
     <header>
@@ -161,9 +161,8 @@ try {
             <div class="circle"></div>
             <img src="../../../assets/media/image/notification.png" class="icn" alt="Notifications">
             <div class="dp">
-                <img src="../../../assets/media/image/Profil.png" class="dpicn" alt="Photo de profil">
-                <a href="../../auth/login.php" aria-label="Se connecter"></a>
-            </div>
+                    <a href="./src/Views/auth/login.php"><img src="./assets/media/image/Profil.png" class="dpicn"></a>
+                </div>
         </div>
     </header>
     <div class="main-container">
@@ -174,7 +173,7 @@ try {
                         <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
                             class="nav-img"
                             alt="dashboard">
-                        <a href="./index.php">Dashboard</a>
+                        <a href="#">Dashboard</a>
                     </div>
 
                     <div class="nav-option option2">
@@ -211,7 +210,7 @@ try {
         <main class="main">
         <nav class="categories" aria-label="Catégories de cours">
             <button class="category-btn">
-                <a href="?category=0&search=<?= urlencode($search) ?>">All Course</a>
+                <a href="?category=0&search=<?= urlencode($search) ?>">All Category</a>
             </button>
             <?php if (!empty($categorys)): ?>
                 <?php foreach ($categorys as $cat): ?>
@@ -222,7 +221,7 @@ try {
                     </button>
                 <?php endforeach; ?>
             <?php else: ?>
-                <p class="no-content">Aucune catégorie trouvée.</p>
+                <p class="no-content">No Category found</p>
             <?php endif; ?>
         </nav>
         </nav>
@@ -261,7 +260,7 @@ try {
                         </article>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p class="no-content">Aucun cours trouvé.</p>
+                    <p class="no-content">No courses found</p>
                 <?php endif; ?>
             </div>
 

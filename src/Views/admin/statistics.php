@@ -50,6 +50,7 @@ $statistics = getStatistics($conn);
     <link rel="stylesheet" href="../../../assets/styles/statistic.css">
 </head>
 <body>
+    <a href="./dashboard.php"><img src="../../../assets/media/image/fleche-gauche.png" alt="return" class="return-icon"></a>
     <h1>Statistiques de la Plateforme</h1>
 
     <div class="statistics-container">

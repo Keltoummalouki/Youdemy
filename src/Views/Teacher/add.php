@@ -23,11 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $title = trim($_POST["title"]);
         $content = trim($_POST["content"]);
         $description = isset($_POST['description']) ? strip_tags(trim($_POST['description'])) : ''; 
-
         $category_id = $_POST["course_id"]; 
         $user_id = $_SESSION['user_id'];
-
         $tags = isset($_POST["tags"]) ? $_POST["tags"] : []; 
+
 
         $courseController = new CourseController();
         try {
@@ -85,7 +84,7 @@ try {
             
             <div class="input-box">
                 <input type="text" 
-                    placeholder="Titre du cours" 
+                    placeholder="Course title" 
                     name="title" 
                     required 
                     value="<?php echo isset($_POST['title']) ? htmlspecialchars($_POST['title']) : ''; ?>">
@@ -93,7 +92,7 @@ try {
 
             <div class="input-box">
                 <input type="url" 
-                    placeholder="Content du cours" 
+                    placeholder="course content" 
                     name="content" 
                     required 
                     value="<?php echo isset($_POST['content']) ? htmlspecialchars($_POST['content']) : ''; ?>">

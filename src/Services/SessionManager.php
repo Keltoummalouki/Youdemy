@@ -8,8 +8,6 @@ class SessionManager {
             session_start();
         }
     }
-    
-
 
     public static function isLoggedIn() {
         self::startSession();

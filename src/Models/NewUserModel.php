@@ -16,8 +16,6 @@ class NewUserModel {
 
     public function addUser($username, $email, $password ,$role,$status) {
         try {
-
-            
                 switch ($role) {
                     case "Teacher":
                         $status = 'Not Activated';

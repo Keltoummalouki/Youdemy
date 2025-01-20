@@ -50,17 +50,13 @@ $categorys = $conn->query("SELECT * FROM CATEGORY")->fetchAll(PDO::FETCH_ASSOC);
             <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
                 class="icn"
                 alt="">
-            <div class="dp">
-                <img src="../../../../assets/media/image/Profil.png"
-                    class="dpicn"
-                    alt="dp">
-                    <a href="../../auth/login.php"></a>
-            </div>
+                <div class="dp">
+                    <a href="../../auth/login.php"><img src="./assets/media/image/Profil.png" class="dpicn"></a>
+                </div>
         </div>
     </header>
 
     <div class="main-container">
-
         <div class="navcontainer">
             <nav class="nav">
                 <div class="nav-upper-options">
@@ -68,7 +64,7 @@ $categorys = $conn->query("SELECT * FROM CATEGORY")->fetchAll(PDO::FETCH_ASSOC);
                         <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
                             class="nav-img"
                             alt="dashboard">
-                        <a href="../dashboard.php">Dashboard</a>
+                        <a href="./index.php">Dashboard</a>
                     </div>
 
                     <div class="nav-option option2">
@@ -96,7 +92,7 @@ $categorys = $conn->query("SELECT * FROM CATEGORY")->fetchAll(PDO::FETCH_ASSOC);
                         <img src="../../../../assets/media/image/report.png"
                             class="nav-img"
                             alt="raport">
-                        <h3> Report</h3>
+                            <a href="../statistics.php"> Statistiques</a>
                     </div>
 
                     <div class="nav-option option6">

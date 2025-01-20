@@ -56,8 +56,7 @@ $videoId = $isYouTube ? extractYouTubeVideoId($contentLink) : null;
             <div class="circle"></div>
             <img src="../../../assets/media/image/notification.png" class="icn" alt="Notifications">
             <div class="dp">
-                <img src="../../../assets/media/image/Profil.png" class="dpicn" alt="Photo de profil">
-                <a href="../../auth/login.php" aria-label="Se connecter"></a>
+                <a href="./src/Views/auth/login.php"><img src="./assets/media/image/Profil.png" class="dpicn"></a>
             </div>
         </div>
     </header>
@@ -76,7 +75,7 @@ $videoId = $isYouTube ? extractYouTubeVideoId($contentLink) : null;
                         <img src="../../../assets/media/image/teacherblack.png"
                             class="nav-img"
                             alt="institution">
-                        <a href="./mycourse.php"> My Course</a>
+                        <a href="#"> My Course</a>
                     </div>
 
                     <div class="nav-option option5">
@@ -152,7 +151,7 @@ $videoId = $isYouTube ? extractYouTubeVideoId($contentLink) : null;
                         </article>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p class="no-content">Aucun cours trouvé.</p>
+                    <p class="no-content">No courses found.</p>
                 <?php endif; ?>
             </div>
         </main>

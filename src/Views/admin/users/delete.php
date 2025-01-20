@@ -27,8 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['player_id'])) {
 }
 ?>
 
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
