@@ -68,26 +68,29 @@ class CourseModel {
         
     public function getCourseById($courseId) {
         try {
-            $query = "SELECT c.*, 
-                        GROUP_CONCAT(t.tag) as tags,
+            $query = "SELECT 
+                        c.id,
+                        c.title,
+                        c.content,
+                        c.description,
                         cat.category as category_name,
-                        u.username as teacher_name
-                     FROM COURSES c
-                     LEFT JOIN CourseTag ct ON c.id = ct.course_id
-                     LEFT JOIN TAGS t ON ct.tag_id = t.id
-                     LEFT JOIN CATEGORY cat ON c.category_id = cat.id
-                     LEFT JOIN USERS u ON c.user_id = u.id
-                     WHERE c.id = :id
-                     GROUP BY c.id";
-
+                        u.username as instructor_name,  // Ensure this field is included
+                        GROUP_CONCAT(t.tag SEPARATOR ', ') AS tags
+                    FROM COURSES c
+                    LEFT JOIN CATEGORY cat ON c.category_id = cat.id
+                    LEFT JOIN USERS u ON c.user_id = u.id
+                    LEFT JOIN CourseTag ct ON c.id = ct.course_id
+                    LEFT JOIN TAGS t ON ct.tag_id = t.id
+                    WHERE c.id = :course_id
+                    GROUP BY c.id, c.title, c.content, c.description, cat.category, u.username";
+            
             $stmt = $this->connexion->prepare($query);
-            $stmt->bindParam(':id', $courseId, PDO::PARAM_INT);
+            $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
             $stmt->execute();
             
             return $stmt->fetch(PDO::FETCH_ASSOC);
-
         } catch (PDOException $e) {
-            error_log("Database error: " . $e->getMessage());
+            error_log("Error fetching course details: " . $e->getMessage());
             return null;
         }
     }

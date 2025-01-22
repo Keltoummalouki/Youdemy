@@ -97,9 +97,9 @@ try {
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Révolutionnez votre apprentissage</h1>
-            <p>Youdemy est une plateforme de cours en ligne innovante qui offre une expérience d'apprentissage personnalisée et interactive pour les étudiants et les enseignants.</p>
-            <a href="#signup" class="cta-button">Commencer gratuitement</a>
+            <h1>Revolutionize your learning</h1>
+            <p>Youdemy is an innovative online course platform that offers a personalized and interactive learning experience for students and teachers.</p>
+            <a href="./src/Views/auth/register.php" class="cta-button">Get started for free</a>
         </div>
     </section>
 
@@ -139,7 +139,7 @@ try {
                     </article>
                 <?php endforeach; ?>
             <?php else: ?>
-                <p class="no-content">Aucun cours trouvé.</p>
+                <p class="no-content">No courses found.</p>
             <?php endif; ?>
         </div>
 
@@ -161,19 +161,19 @@ try {
     
     <section class="features">
         <div class="features-container">
-            <h2>Nos fonctionnalités</h2>
+            <h2>Our features</h2>
             <div class="features-grid">
                 <div class="feature-card">
-                    <h3>Apprentissage personnalisé</h3>
-                    <p>Un parcours adapté à votre rythme et à vos objectifs d'apprentissage.</p>
+                    <h3>Personalized learning</h3>
+                    <p>A course adapted to your pace and your learning objectives.</p>
                 </div>
                 <div class="feature-card">
-                    <h3>Experts qualifiés</h3>
-                    <p>Apprenez avec des instructeurs expérimentés et passionnés.</p>
+                    <h3>Qualified experts</h3>
+                    <p>Learn with experienced and passionate instructors.</p>
                 </div>
                 <div class="feature-card">
-                    <h3>Contenu interactif</h3>
-                    <p>Des cours enrichis avec des quiz, des projets pratiques et des discussions en direct.</p>
+                    <h3>Interactive content</h3>
+                    <p>Courses enriched with quizzes, practical projects and live discussions.</p>
                 </div>
             </div>
         </div>

@@ -62,6 +62,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../../../assets/styles/addform.css">
     <title>Enroll Course</title>
+    <style>
+        .container {
+            width: 550px;
+            max-height: 130vh;
+            position: absolute;
+            top : 20%;
+            overflow: auto;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, .2);
+            margin: 10px ;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+            color: #fff;
+            border-radius: 10px;
+            padding: 30px 40px;
+            min-height: 25vh;
+            background-color: black;
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
     <a href="./index.php">

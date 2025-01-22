@@ -15,32 +15,36 @@ $totalStudents = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Student'
 $totalCourses = $conn->query("SELECT COUNT(*) FROM courses WHERE user_id = " . $user['id'])->fetchColumn();
 $totalVisitors = $conn->query("SELECT COUNT(*) FROM users")->fetchColumn();
 
-$courses = $conn->query("SELECT 
-            c.id, 
-            c.title, 
-            c.description, 
-            c.content AS contenu, 
-            c.category_id AS category,
-            c.user_id AS teacher,
-            u.username,
-            GROUP_CONCAT(t.tag SEPARATOR ', ') AS tags
-        FROM 
-            COURSES c
-        LEFT JOIN 
-            CATEGORY cat ON cat.id = c.category_id
-        LEFT JOIN 
-            USERS u ON u.id = c.user_id
-        LEFT JOIN 
-            CourseTag ct ON c.id = ct.course_id
-        LEFT JOIN 
-            TAGS t ON ct.tag_id = t.id
-        WHERE 
-            c.user_id = " . $user['id'] . "
-        GROUP BY 
-            c.id, c.title, c.description, c.content, c.category_id, c.user_id, u.username
-        ORDER BY 
-            c.title
-")->fetchAll(PDO::FETCH_ASSOC);
+$query = $conn->prepare("
+    SELECT 
+        c.id, 
+        c.title, 
+        c.description, 
+        c.content AS contenu, 
+        cat.category AS category_name,
+        c.user_id AS teacher,
+        u.username,
+        GROUP_CONCAT(t.tag SEPARATOR ', ') AS tags
+    FROM 
+        COURSES c
+    LEFT JOIN 
+        CATEGORY cat ON cat.id = c.category_id
+    LEFT JOIN 
+        USERS u ON u.id = c.user_id
+    LEFT JOIN 
+        CourseTag ct ON c.id = ct.course_id
+    LEFT JOIN 
+        TAGS t ON ct.tag_id = t.id
+    WHERE 
+        c.user_id = :user_id
+    GROUP BY 
+        c.id, c.title, c.description, c.content, cat.category, c.user_id, u.username
+    ORDER BY 
+        c.title
+");
+
+$query->execute(['user_id' => $user['id']]);
+$courses = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -203,7 +207,7 @@ $courses = $conn->query("SELECT
                                                 <td class="output"><?php echo htmlspecialchars($course['title']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['description']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['contenu']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($course['category']); ?></td>
+                                                <td class="output"><?php echo htmlspecialchars($course['category_name']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['tags']); ?></td>
                                                 <td>
                                                 <a href="./update.php?id=<?php echo $course['id']; ?>">

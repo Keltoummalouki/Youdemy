@@ -14,27 +14,31 @@ $totalStudents = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Student'
 $totalCourses = $conn->query("SELECT COUNT(*) FROM courses")->fetchColumn();
 $totalVisitors = $conn->query("SELECT COUNT(*) FROM users")->fetchColumn();
 
-$courses = $conn->query("
-    SELECT 
-        courses.id, 
-        courses.title, 
-        courses.description, 
-        courses.content AS contenu, 
-        courses.category_id AS category, 
-        courses.user_id AS teacher,
-        GROUP_CONCAT(tags.tag SEPARATOR ', ') AS tags
+$courses = $conn->query("SELECT 
+        COURSES.id, 
+        COURSES.title, 
+        COURSES.description, 
+        COURSES.content AS contenu, 
+        CATEGORY.category AS category_name,
+        USERS.username AS teacher_name,
+        GROUP_CONCAT(TAGS.tag SEPARATOR ', ') AS tags
     FROM 
         COURSES
-    JOIN 
-        CATEGORY ON CATEGORY.id = courses.category_id
-    JOIN 
-        USERS ON USERS.id = courses.user_id
-    JOIN 
-        CourseTag ON courses.id = CourseTag.course_id
-    JOIN 
+    LEFT JOIN 
+        CATEGORY ON CATEGORY.id = COURSES.category_id
+    LEFT JOIN 
+        USERS ON USERS.id = COURSES.user_id
+    LEFT JOIN 
+        CourseTag ON COURSES.id = CourseTag.course_id
+    LEFT JOIN 
         TAGS ON CourseTag.tag_id = TAGS.id
     GROUP BY 
-        courses.id
+        COURSES.id, 
+        COURSES.title, 
+        COURSES.description, 
+        COURSES.content, 
+        CATEGORY.category,
+        USERS.username
 ")->fetchAll(PDO::FETCH_ASSOC);
 
 
@@ -217,8 +221,8 @@ $courses = $conn->query("
                                                 <td class="output"><?php echo htmlspecialchars($course['title']) ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['description']) ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['contenu']) ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($course['category']) ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($course['teacher']) ?></td>
+                                                <td class="output"><?php echo htmlspecialchars($course['category_name']) ?></td>
+                                                <td class="output"><?php echo htmlspecialchars($course['teacher_name']) ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($course['tags']) ?></td>
                                                 <td>
 
@@ -226,7 +230,7 @@ $courses = $conn->query("
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td>No category found.</td>
+                                            <td>No course found.</td>
                                         </tr>
                                     <?php endif; ?>
                             </tbody>

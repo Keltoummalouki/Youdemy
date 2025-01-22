@@ -17,7 +17,7 @@ class SessionManager {
     public static function requireAuth() {
         self::startSession();
         if (!self::isLoggedIn()) {
-            header('Location: /auth/login.php');
+            header('Location: Youdemy/src/Views/auth/login.php');
             exit();
         }
     }
@@ -42,7 +42,7 @@ class SessionManager {
         self::startSession();
         session_unset();
         session_destroy();
-        header('Location: /auth/login.php');
+        header('Location: Youdemy/src/Views/auth/login.php');
         exit();
     }
 

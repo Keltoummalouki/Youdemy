@@ -237,6 +237,9 @@ try {
                                 <p class="course-instructor">
                                     <?php echo htmlspecialchars($course['username']); ?>
                                 </p>
+                                <p class="course-description">
+                                    <?php echo htmlspecialchars($course['description']); ?>
+                                </p>
                                 <div class="course-rating">
                                     <span class="rating-stars" aria-label="Note de 4.8 sur 5">★★★★★</span>
                                     <span>4.8 (2,345 avis)</span>
