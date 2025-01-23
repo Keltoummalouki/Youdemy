@@ -2,13 +2,14 @@
 
 namespace App\Classes;
 
-    class Course {
-        private $id;
-        private $title;
-        private $description;
-        private $content;
-        private $tag;
-        private $category;
+    abstract class Course {
+
+        protected $id;
+        protected $title;
+        protected $description;
+        protected $content;
+        protected $tag;
+        protected $category;
 
         public function __construct($id,$title,$description,$content,$tag,$category){
             $this->id = $id;
@@ -63,4 +64,6 @@ namespace App\Classes;
             $this->category = $category;
         }
 
-    }
+        abstract public function displayCourse();
+}
+        

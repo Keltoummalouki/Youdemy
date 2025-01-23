@@ -1,50 +1,21 @@
+
 <?php
-require_once '../../../vendor/autoload.php';
+require_once '../../../../vendor/autoload.php';
 
 use App\Config\DatabaseConnexion;
-use App\Services\SessionManager;
-
-SessionManager::requireAuth();
-$user = SessionManager::getUser();
+use App\Models\UserModel;
 
 $db = new DatabaseConnexion();
 $conn = $db->connect();
+$userModel = new UserModel(); 
 
 $totalTeachers = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Teacher'")->fetchColumn();
 $totalStudents = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Student'")->fetchColumn();
-$totalCourses = $conn->query("SELECT COUNT(*) FROM courses WHERE user_id = " . $user['id'])->fetchColumn();
+$totalCourses = $conn->query("SELECT COUNT(*) FROM courses")->fetchColumn();
 $totalVisitors = $conn->query("SELECT COUNT(*) FROM users")->fetchColumn();
 
-$query = $conn->prepare("
-    SELECT 
-        c.id, 
-        c.title, 
-        c.description, 
-        c.content AS contenu, 
-        cat.category AS category_name,
-        c.user_id AS teacher,
-        u.username,
-        GROUP_CONCAT(t.tag SEPARATOR ', ') AS tags
-    FROM 
-        COURSES c
-    LEFT JOIN 
-        CATEGORY cat ON cat.id = c.category_id
-    LEFT JOIN 
-        USERS u ON u.id = c.user_id
-    LEFT JOIN 
-        CourseTag ct ON c.id = ct.course_id
-    LEFT JOIN 
-        TAGS t ON ct.tag_id = t.id
-    WHERE 
-        c.user_id = :user_id
-    GROUP BY 
-        c.id, c.title, c.description, c.content, cat.category, c.user_id, u.username
-    ORDER BY 
-        c.title
-");
+$categorys = $conn->query("SELECT * FROM CATEGORY")->fetchAll(PDO::FETCH_ASSOC);
 
-$query->execute(['user_id' => $user['id']]);
-$courses = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -55,7 +26,7 @@ $courses = $query->fetchAll(PDO::FETCH_ASSOC);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="../../../assets/styles/dashboard.css">
+    <link rel="stylesheet" href="../../../../assets/styles/dashboard.css">
 </head>
 
 <body>
@@ -68,7 +39,7 @@ $courses = $query->fetchAll(PDO::FETCH_ASSOC);
             <input type="text"
                 placeholder="Search">
             <div class="searchbtn">
-                <img src="../../../assets/media/image/search.png"
+                <img src="../../../../assets/media/image/search.png"
                     class="icn srchicn"
                     alt="search-icon">
             </div>
@@ -80,7 +51,7 @@ $courses = $query->fetchAll(PDO::FETCH_ASSOC);
                 class="icn"
                 alt="">
                 <div class="dp">
-                    <a href="./src/Views/auth/login.php"><img src="../../../assets/media/image/Profil.png" class="dpicn"></a>
+                    <a href="../../auth/login.php"><img src="./assets/media/image/Profil.png" class="dpicn"></a>
                 </div>
         </div>
     </header>
@@ -93,28 +64,49 @@ $courses = $query->fetchAll(PDO::FETCH_ASSOC);
                         <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
                             class="nav-img"
                             alt="dashboard">
-                        <a href="./dashboard.php">Dashboard</a>
+                        <a href="./index.php">Dashboard</a>
+                    </div>
+
+                    <div class="nav-option option2">
+                        <img src="../../../../assets/media/image/courseblack.png"
+                            class="nav-img"
+                            alt="institution">
+                        <a href="../courses/index.php"> Course</a>
+                    </div>
+
+                    <div class="option3 nav-option">
+                        <img src="../../../../assets/media/image/category.png"
+                            class="nav-img"
+                            alt="articles">
+                        <a href="#"> Category</a>
+                    </div>
+
+                    <div class="nav-option option4">
+                        <img src="../../../../assets/media/image/tag icon.png"
+                            class="nav-img"
+                            alt="report">
+                        <a href="../tags/index.php"> Tag</a>
                     </div>
 
                     <div class="nav-option option5">
-                        <img src="../../../assets/media/image/report.png"
+                        <img src="../../../../assets/media/image/report.png"
                             class="nav-img"
                             alt="raport">
-                        <h3> Report</h3>
+                            <a href="../statistics.php"> Statistiques</a>
                     </div>
 
                     <div class="nav-option option6">
-                        <img src="../../../assets/media/image/settings.png"
+                        <img src="../../../../assets/media/image/settings.png"
                             class="nav-img"
                             alt="settings">
                         <a href="#"> Settings</a>
                     </div>
 
                     <div class="nav-option logout">
-                        <img src="../../../assets/media/image/login.png"
+                        <img src="../../../../assets/media/image/login.png"
                             class="nav-img"
                             alt="logout">
-                        <a href="../auth/logout.php">Logout</a>
+                        <a href="../../auth/logout.php">Logout</a>
                     </div>
 
                 </div>
@@ -142,7 +134,7 @@ $courses = $query->fetchAll(PDO::FETCH_ASSOC);
                         <h2 class="topic">ToTal Teacher</h2>
                     </div>
 
-                    <img src="../../../assets/media/image/teacher white.png"
+                    <img src="../../../../assets/media/image/teacher white.png"
                         alt="visitors">
                 </div>
 
@@ -152,7 +144,7 @@ $courses = $query->fetchAll(PDO::FETCH_ASSOC);
                         <h2 class="topic">Total Student</h2>
                     </div>
 
-                    <img src="../../../assets/media/image/students.png"
+                    <img src="../../../../assets/media/image/students.png"
                         alt="recruiter">
                 </div>
 
@@ -162,7 +154,7 @@ $courses = $query->fetchAll(PDO::FETCH_ASSOC);
                         <h2 class="topic">Total Course</h2>
                     </div>
 
-                    <img src="../../../assets/media/image/coursewhite.png"
+                    <img src="../../../../assets/media/image/coursewhite.png"
                         alt="candidate">
                 </div>
 
@@ -174,16 +166,16 @@ $courses = $query->fetchAll(PDO::FETCH_ASSOC);
                         <h2 class="topic">Total Visitors</h2>
                     </div>
 
-                    <img src="../../../assets/media/image/visiteur-white.png" alt="active">
+                    <img src="../../../../assets/media/image/visiteur-white.png" alt="active">
                 </div>
             </div>
 
             <div class="report-container">
                 <div class="report-header">
-                    <h1 class="recent-Articles">Recent Course</h1>
+                    <h1 class="recent-Articles">Recent Category</h1>
                     <div>
-                    
-                    <button id="add-btn"><a href="./add.php">Add</a></button>
+
+                    <button id="add-btn"><a href="../categorys/add.php">Add</a></button>
 
                     </div>
                 </div>
@@ -191,44 +183,37 @@ $courses = $query->fetchAll(PDO::FETCH_ASSOC);
                         <table class="styled-table">
                             <thead>
                                 <tr>
-                                    <th class="t-op">Title</th>
-                                    <th class="t-op">Description</th>
-                                    <th class="t-op">Content</th>
                                     <th class="t-op">Category</th>
-                                    <th class="t-op">tag</th>
-                                    <th class="t-op"></th>
-                                    <th class="t-op"></th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                    <?php if (count($courses) > 0): ?>
-                                        <?php foreach ($courses as $course): ?>
+                                    <?php if (count($categorys) > 0): ?>
+                                        <?php foreach ($categorys as $category): ?>
                                             <tr class="tr-style">
-                                                <td class="output"><?php echo htmlspecialchars($course['title']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($course['description']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($course['contenu']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($course['category_name']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($course['tags']); ?></td>
+                                                <td class="output"><?php echo htmlspecialchars($category['category']) ?></td>
                                                 <td>
-                                                <a href="./update.php?id=<?php echo $course['id']; ?>">
+                                                <a href="./edit.php?id=<?php echo $category['id']; ?>">
                                                     <button type="submit" class="edit-btn">
-                                                        <img src="../../../assets/media/image/edit-button.png" class="icon-output" alt="edit-icon">
+                                                        <img src="../../../../assets/media/image/edit-button.png" class="icon-output" alt="edit-icon">
                                                     </button>
                                                 </a>
                                             </td>
                                             <td>
-                                            <form method="POST" action="./delete.php">
-                                            <input type="hidden" name="course_id" value="<?php echo $course['id']; ?>">
-                                            <button type="submit" class="delete-btn">
-                                                <img src="../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
-                                            </button>
-                                        </form>
+                                                <form method="POST" action="./delete.php">
+                                                    <input type="hidden" name="player_id" value="<?php echo $category['id']; ?>">
+                                                    <button type="submit" class="delete-btn">
+                                                        <img src="../../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
+                                                    </button>
+                                                </form>
                                             </td> 
-                                            </tr>
+
+                                        </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td colspan="8">No courses found.</td>
+                                            <td>No category found.</td>
                                         </tr>
                                     <?php endif; ?>
                             </tbody>
@@ -238,7 +223,8 @@ $courses = $query->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
-
+    <script src="../../../../assets/js/main.js"></script>
+    
 </body>
 
 </html>

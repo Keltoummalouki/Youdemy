@@ -1,11 +1,19 @@
-
 <?php
 require_once '../../../vendor/autoload.php';
 
 use App\Config\DatabaseConnexion;
+use App\Controllers\UserController;
 
 $db = new DatabaseConnexion();
 $conn = $db->connect();
+$userController = new UserController();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['new_status'])) {
+    $userId = $_POST['user_id'];
+    $newStatus = $_POST['new_status'];
+    $userController->updateUserStatus($userId, $newStatus);
+}
+
 
 $totalTeachers = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Teacher'")->fetchColumn();
 $totalStudents = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'Student'")->fetchColumn();
@@ -48,12 +56,9 @@ $users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
             <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
                 class="icn"
                 alt="">
-            <div class="dp">
-                <img src="../../../assets/media/image/Profil.png"
-                    class="dpicn"
-                    alt="dp">
-                    <a href="../pages/profil.php"></a>
-            </div>
+                <div class="dp">
+                    <a href="./src/Views/auth/login.php"><img src="./assets/media/image/Profil.png" class="dpicn"></a>
+                </div>
         </div>
     </header>
 
@@ -66,35 +71,35 @@ $users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
                         <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
                             class="nav-img"
                             alt="dashboard">
-                        <a href="./dashboard.php">Dashboard</a>
+                        <a href="#">Dashboard</a>
                     </div>
 
                     <div class="nav-option option2">
                         <img src="../../../assets/media/image/teacherblack.png"
                             class="nav-img"
                             alt="institution">
-                        <a href="../candidate/index.php"> Teacher</a>
+                        <a href="./courses/index.php"> Course</a>
                     </div>
 
                     <div class="option3 nav-option">
-                        <img src="../../../assets/media/image/studentBlack.png"
+                        <img src="../../../assets/media/image/category.png"
                             class="nav-img"
                             alt="articles">
-                        <a href="../recruiter/index.php"> Students</a>
+                        <a href="./categorys/index.php"> Category</a>
                     </div>
 
                     <div class="nav-option option4">
-                        <img src="../../../assets/media/image/courseblack.png"
+                        <img src="../../../assets/media/image/tag icon.png"
                             class="nav-img"
                             alt="report">
-                        <a href="./offers/index.php"> Course</a>
+                        <a href="./tags/index.php"> Tag</a>
                     </div>
 
                     <div class="nav-option option5">
                         <img src="../../../assets/media/image/report.png"
                             class="nav-img"
                             alt="raport">
-                        <h3> Report</h3>
+                            <a href="./statistics.php"> Statistiques</a>
                     </div>
 
                     <div class="nav-option option6">
@@ -108,7 +113,7 @@ $users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
                         <img src="../../../assets/media/image/login.png"
                             class="nav-img"
                             alt="logout">
-                        <a href="#">Logout</a>
+                        <a href="../auth/logout.php">Logout</a>
                     </div>
 
                 </div>
@@ -175,11 +180,6 @@ $users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
             <div class="report-container">
                 <div class="report-header">
                     <h1 class="recent-Articles">Recent Users</h1>
-                    <div>
-                    
-                    <button id="add-btn"><a href="../admin/options.php">Options</a></button>
-
-                    </div>
                 </div>
                     <div class="table-wrapper">
                         <table class="styled-table">
@@ -187,9 +187,8 @@ $users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
                                 <tr>
                                     <th class="t-op">UserName</th>
                                     <th class="t-op">Email</th>
-                                    <th class="t-op">Password</th>
                                     <th class="t-op">Role</th>
-                                    <th class="t-op">status</th>
+                                    <th class="t-op">account status</th>
                                     <th class="t-op"></th>
                                 </tr>
                             </thead>
@@ -199,20 +198,31 @@ $users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
                                             <tr class="tr-style">
                                                 <td class="output"><?php echo htmlspecialchars($user['username']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($user['email']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($user['password']); ?></td>
                                                 <td class="output"><?php echo htmlspecialchars($user['role']); ?></td>
-                                                <td class="output"><?php echo htmlspecialchars($user['account_status']); ?></td>
+                                                <td class="output">
+                                                <form method="POST" action="">
+                                                    <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                                    <select name="new_status" class="account-status" id="accountStatus" onchange="submitStatus(this)">
+                                                        <option value="Activated" data-color="green" <?php if ($user['account_status'] == 'Activated') echo 'selected'; ?>>Activated</option>
+                                                        <option value="Not Activated" data-color="orange" <?php if ($user['account_status'] == 'Not Activated') echo 'selected'; ?>>Not Activated</option>
+                                                        <option value="Suspended" data-color="red" <?php if ($user['account_status'] == 'Suspended') echo 'selected'; ?>>Suspended</option>
+                                                        <option value="Deleted" data-color="gray" <?php if ($user['account_status'] == 'Deleted') echo 'selected'; ?>>Deleted</option>
+                                                    </select>
+                                                </form>
+                                                </td> 
                                                 <td>
-                                                        <button type="submit" class="delete-btn">
-                                                            <img src="../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
-                                                        </button>
-
+                                                <form method="POST" action="./users/delete.php">
+                                                    <input type="hidden" name="player_id" value="<?php echo $user['id']; ?>">
+                                                    <button type="submit" class="delete-btn">
+                                                        <img src="../../../assets/media/image/delete-icon.png" class="icon-output" alt="delete-icon">
+                                                    </button>
+                                                </form> 
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td colspan="8">No users found.</td>
+                                            <td>No users found.</td>
                                         </tr>
                                     <?php endif; ?>
                             </tbody>
@@ -222,7 +232,8 @@ $users = $conn->query("SELECT * FROM Users")->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
-
+    <script src="../../../assets/js/main.js"></script>
+    
 </body>
 
 </html>

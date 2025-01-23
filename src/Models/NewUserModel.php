@@ -14,13 +14,23 @@ class NewUserModel {
         $this->connexion = $db->connect();
     }
 
-    public function addUser($username, $email, $password ,$role ) {
+    public function addUser($username, $email, $password ,$role,$status) {
         try {
+                switch ($role) {
+                    case "Teacher":
+                        $status = 'Not Activated';
+                        break;
+                    case "Student":
+                        $status = 'Activated';
+                        break;
+                    default:
+                    $status = 'Activated';
+                }
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            $query = "INSERT INTO `users` (username, email, password ,role )
-                        VALUES (:username, :email, :password , :role);";
+            $query = "INSERT INTO users (username, email, password ,role, account_status )
+                        VALUES (:username, :email, :password , :role , :account_status );";
             
             
 
@@ -29,6 +39,7 @@ class NewUserModel {
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $hashedPassword);
             $stmt->bindParam(':role', $role);
+            $stmt->bindParam(':account_status', $status);
             $stmt->execute();
 
             return $this->connexion->lastInsertId();

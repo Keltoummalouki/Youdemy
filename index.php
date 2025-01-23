@@ -1,117 +1,182 @@
+<?php
+require_once './vendor/autoload.php';
+
+use App\Config\DatabaseConnexion;
+
+$db = new DatabaseConnexion();
+$conn = $db->connect();
+
+$categorys = $conn->query("SELECT * FROM CATEGORY ORDER BY category")->fetchAll(PDO::FETCH_ASSOC);
+$result = false;
+
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$perPage = 4;
+$offset = ($page - 1) * $perPage;
+
+try {
+    $sql = "
+        SELECT 
+            c.id, 
+            c.title, 
+            c.description, 
+            c.content AS contenu, 
+            c.category_id AS category_id,
+            cat.category AS category_name,
+            c.user_id AS teacher,
+            u.username,
+            GROUP_CONCAT(t.tag SEPARATOR ', ') AS tags
+        FROM 
+            COURSES c
+        LEFT JOIN 
+            CATEGORY cat ON cat.id = c.category_id
+        LEFT JOIN 
+            USERS u ON u.id = c.user_id
+        LEFT JOIN 
+            CourseTag ct ON c.id = ct.course_id
+        LEFT JOIN 
+            TAGS t ON ct.tag_id = t.id
+        WHERE 
+            c.title LIKE :search OR cat.category LIKE :search OR t.tag LIKE :search
+        GROUP BY 
+            c.id, c.title, c.description, c.content, c.category_id, cat.category, c.user_id, u.username
+        ORDER BY 
+            c.title
+        LIMIT :limit OFFSET :offset
+    ";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+    $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $totalCourses = $conn->prepare("SELECT COUNT(*) FROM COURSES c LEFT JOIN CATEGORY cat ON cat.id = c.category_id LEFT JOIN CourseTag ct ON c.id = ct.course_id LEFT JOIN TAGS t ON ct.tag_id = t.id WHERE c.title LIKE :search OR cat.category LIKE :search OR t.tag LIKE :search");
+    $totalCourses->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+    $totalCourses->execute();
+    $totalCourses = $totalCourses->fetchColumn();
+    $totalPages = ceil($totalCourses / $perPage);
+
+} catch (PDOException $e) {
+    error_log("Database error: " . $e->getMessage());
+    $courses = [];
+}
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/styles/style.css">
+    <link rel="stylesheet" href="./assets/styles/catalog.css">
     <title>Youdemy</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
-<body class="text-gray-800 bg-gray-100 font-sans">
-<nav class="bg-purple-600 shadow-md p-4 flex justify-between items-center">
-    <a href="/" class="text-xl font-bold text-white">Youdemy</a>
+<body>
 
-    <div class="hidden md:flex items-center space-x-4 flex-1 ml-4">
-        <div class="relative dropdown">
-            <button id="dropdown-button" class="bg-purple-500 px-4 py-2 text-white rounded-md">Catégories</button>
-            <ul id="dropdown-menu" class="absolute top-12 left-0 bg-purple-200 shadow-md rounded-md mt-2 w-40 hidden">
-                <li class="p-2 hover:bg-purple-300 text-gray-800">Développement Web</li>
-                <li class="p-2 hover:bg-purple-300 text-gray-800">Design</li>
-                <li class="p-2 hover:bg-purple-300 text-gray-800">Marketing</li>
-            </ul>
+<header>
+        <div class="logosec">
+            <div class="logo">You<span>demy</span></div>
         </div>
-        <input type="text" placeholder="Rechercher un cours" class="bg-purple-100 rounded-lg p-2 text-gray-800 w-full border border-purple-300 placeholder-gray-600 hidden md:block">
-    </div>
 
-    <div class="hidden md:flex gap-4">
-        <button class="bg-white text-purple-600 px-4 py-2 rounded-lg">Connexion</button>
-        <button class="bg-purple-500 text-white px-4 py-2 rounded-lg">S'inscrire</button>
-    </div>
-
-    <button id="hamburger-button" class="md:hidden bg-purple-500 text-white p-2 rounded-md">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-    </button>
-</nav>
-
-<div id="mobile-menu" class="hidden flex-col md:hidden bg-purple-50 p-4 space-y-4">
-    <input type="text" placeholder="Rechercher un cours" class="bg-purple-100 rounded-lg p-2 text-gray-800 w-full border border-purple-300 placeholder-gray-600">
-    <button class="bg-white text-purple-600 px-4 py-2 rounded-lg w-full">Connexion</button>
-    <button class="bg-purple-500 text-white px-4 py-2 rounded-lg w-full">S'inscrire</button>
-
-
-    <div class="relative dropdown">
-        <button id="mobile-dropdown-button" class="bg-purple-500 w-full px-4 py-2 text-white rounded-md">Catégories</button>
-        <ul id="mobile-dropdown-menu" class="absolute top-12 left-0 bg-purple-200 shadow-md rounded-md mt-2 w-full hidden">
-            <li class="p-2 hover:bg-purple-300 text-gray-800">Développement Web</li>
-            <li class="p-2 hover:bg-purple-300 text-gray-800">Design</li>
-            <li class="p-2 hover:bg-purple-300 text-gray-800">Marketing</li>
+        <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
         </ul>
-    </div>
-</div>
 
-<section class="relative bg-purple-700 py-16 px-8 text-center text-white">
-    <div class="absolute inset-0 bg-purple-700 opacity-80 blur-sm"></div>
-    <div class="relative">
-        <div class="max-w-2xl mx-auto">
-            <h1 class="text-3xl md:text-5xl font-bold text-white">Apprenez avec Youdemy</h1>
-            <p class="mt-4">
-                La plateforme idéale pour accroître vos compétences et découvrir des connaissances avec des experts.
-            </p>
-            <button class="mt-6 bg-purple-600 text-white px-6 py-3 rounded-lg">Explorer les cours</button>
-        </div>
-    </div>
-</section>
 
-<section class="px-8 py-8 bg-white">
-    <h2 class="text-xl font-bold mb-4 text-purple-600">Cours les mieux notés</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-purple-50 shadow-md p-4 rounded-lg">
-            <img src="./assets/media/image/React-JS.png" alt="React pour Débutants" class="w-full h-32 object-cover rounded-md mb-4">
-            <h3 class="text-lg font-bold">React pour Débutants</h3>
-            <p class="mt-2 text-gray-600">⭐ 4.9</p>
+        <div class="message">
+            <div class="circle"></div>
+            <img src="./assets/media/image/notification.png" class="icn" alt="Notifications">
+            <div class="dp">
+                <a href="./src/Views/auth/login.php"><img src="./assets/media/image/Profil.png" class="dpicn"></a>
+            </div>
         </div>
-        <div class="bg-purple-50 shadow-md p-4 rounded-lg">
-            <img src="./assets/media/image/python.png" alt="Master Python" class="w-full h-32 object-cover rounded-md mb-4">
-            <h3 class="text-lg font-bold">Master Python en 30 jours</h3>
-            <p class="mt-2 text-gray-600">⭐ 4.8</p>
-        </div>
-        <div class="bg-purple-50 shadow-md p-4 rounded-lg">
-            <img src="./assets/media/image/UX-UI-design-les-besoins-du-marc.png" alt="UI/UX Design" class="w-full h-32 object-cover rounded-md mb-4">
-            <h3 class="text-lg font-bold">UI/UX Design : Les Fondations</h3>
-            <p class="mt-2 text-gray-600">⭐ 4.7</p>
-        </div>
-    </div>
-</section>
+    </header>
 
-<section class="px-8 py-8 bg-gray-50">
-    <h2 class="text-2xl font-bold mb-4 text-purple-600">Ils nous font confiance</h2>
-    <div class="flex flex-wrap gap-6 items-center justify-center">
-        <img src="./assets/media/image/Vimeo_icon_block.png" alt="vimeo" class="h-12 p-2">
-        <img src="./assets/media/image/882747.png" alt="samsung" class="h-12 p-2">
-        <img src="./assets/media/image/microsoft.png" alt="volkswagen" class="h-12 p-2">
-        <img src="./assets/media/image/png-transparent-google-logo-goog.png" alt="ericsson" class="h-12 p-2">
-    </div>
-</section>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Revolutionize your learning</h1>
+            <p>Youdemy is an innovative online course platform that offers a personalized and interactive learning experience for students and teachers.</p>
+            <a href="./src/Views/auth/register.php" class="cta-button">Get started for free</a>
+        </div>
+    </section>
 
-<section class="px-8 py-8 bg-white">
-    <h2 class="text-xl font-bold mb-4 text-purple-600">Avis des étudiants</h2>
-    <div class="flex flex-col md:flex-row gap-6">
-        <div class="bg-purple-50 p-4 shadow-md rounded-lg">
-            <p class="text-gray-800">"Super plateforme pour apprendre React !" </p>
-            <p class="mt-2 font-bold text-purple-600">- Alice</p>
+    <main class="main">
+        <h1>Catalog</h1>
+        <div class="courses-grid">
+            <?php if (!empty($courses)): ?>
+                <?php foreach ($courses as $course): ?>
+                    <article class="course-card">
+                        <div class="course-info">
+                            <h3 class="course-title">
+                                <?php echo htmlspecialchars($course['title']); ?>
+                            </h3>
+                            <p class="course-instructor">
+                                <?php echo htmlspecialchars($course['username']); ?>
+                            </p>
+                            <div class="course-rating">
+                                <span class="rating-stars" aria-label="Note de 4.8 sur 5">★★★★★</span>
+                                <span>4.8 (2,345 avis)</span>
+                            </div>
+                            <button class="enroll-btn"> 
+                                <a href="./src/Views/auth/login.php">Enroll</a>
+                            </button>
+                            <div class="course-tags">
+                                <button class="category-btn">
+                                    <?php echo htmlspecialchars($course['category_name']); ?>
+                                </button>
+                                <?php if (!empty($course['tags'])): ?>
+                                    <?php foreach (explode(', ', $course['tags']) as $tag): ?>
+                                        <button class="tag-btn">
+                                            <?php echo htmlspecialchars($tag); ?>
+                                        </button>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="no-content">No courses found.</p>
+            <?php endif; ?>
         </div>
-        <div class="bg-purple-50 p-4 shadow-md rounded-lg">
-            <p class="text-gray-800">"Les cours sont très bien organisés."</p>
-            <p class="mt-2 font-bold text-purple-600">- Bob</p>
+
+        <section class="pagination" aria-label="Navigation des pages">
+            <?php if ($page > 1): ?>
+                <button class="pagination-btn" aria-label="Page précédente" onclick="window.location.href='?page=<?= $page - 1 ?>&search=<?= urlencode($search) ?>'">«</button>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <button class="pagination-btn <?= $i == $page ? 'active' : '' ?>" onclick="window.location.href='?page=<?= $i ?>&search=<?= urlencode($search) ?>'"><?= $i ?></button>
+            <?php endfor; ?>
+
+            <?php if ($page < $totalPages): ?>
+                <button class="pagination-btn" aria-label="Page suivante" onclick="window.location.href='?page=<?= $page + 1 ?>&search=<?= urlencode($search) ?>'">»</button>
+            <?php endif; ?>
+        </section>
+    </main>
+
+    
+    <section class="features">
+        <div class="features-container">
+            <h2>Our features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Personalized learning</h3>
+                    <p>A course adapted to your pace and your learning objectives.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Qualified experts</h3>
+                    <p>Learn with experienced and passionate instructors.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Interactive content</h3>
+                    <p>Courses enriched with quizzes, practical projects and live discussions.</p>
+                </div>
+            </div>
         </div>
-        <div class="bg-purple-50 p-4 shadow-md rounded-lg">
-            <p class="text-gray-800">"Je recommande vivement Youdemy."</p>
-            <p class="mt-2 font-bold text-purple-600">- Charlie</p>
-        </div>
-    </div>
-</section>
-<script defer src="./assets/js/main.js"></script>
+    </section>
 </body>
 </html>
